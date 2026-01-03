@@ -1,0 +1,474 @@
+{
+  "common": {
+    "siteName": "International Rishta",
+    "tagline": "Where Hearts Meet Beyond Borders",
+    "navigation": {
+      "home": "Home",
+      "discover": "Discover",
+      "messages": "Messages",
+      "pricing": "Pricing",
+      "bureau": "Marriage Bureaus",
+      "howItWorks": "How It Works",
+      "signIn": "Sign In",
+      "signUp": "Create Profile"
+    },
+    "validation": {
+      "cnic": "Enter CNIC like 12345-1234567-1",
+      "phone": "Enter phone like 03XX-XXXXXXX"
+    },
+    "bureau": {
+      "register": {
+        "ribbon": "Exclusive Partnership Opportunity",
+        "title": "Become a Licensed Partner Bureau",
+        "subtitle": "Join our network of verified marriage bureaus and earn lifetime commissions",
+        "stepLabel": "Step {step} of 3",
+        "progress": "{percent}% Complete",
+        "step1": {
+          "title": "Bureau Information",
+          "bureauName": "Bureau Name *",
+          "bureauNamePlaceholder": "e.g., Royal Marriage Bureau",
+          "ownerName": "Owner/Director Name *",
+          "ownerNamePlaceholder": "Full name as per CNIC",
+          "cnic": "CNIC Number *",
+          "cnicPlaceholder": "XXXXX-XXXXXXX-X",
+          "phone": "Phone Number *",
+          "phonePlaceholder": "+92-3XX-XXXXXXX",
+          "email": "Email Address *",
+          "emailPlaceholder": "your.bureau@example.com",
+          "city": "City/Location *",
+          "cityPlaceholder": "Select your city",
+          "address": "Complete Office Address *",
+          "addressPlaceholder": "Street address, building details",
+          "continue": "Continue"
+        },
+        "step2": {
+          "title": "Business Details",
+          "registration": "Business Registration Number (if registered)",
+          "registrationPlaceholder": "Leave blank if applying for registration",
+          "registrationHint": "Registered businesses preferred, but we accept new bureau applications",
+          "officeType": "Office Type *",
+          "owned": "Owned Office",
+          "ownedDesc": "You own the business premises",
+          "rented": "Rented Office",
+          "rentedDesc": "You have a rental agreement (will need to provide)",
+          "referenceCount": "Approximate Current Member References",
+          "referenceCountPlaceholder": "0",
+          "referenceCountHint": "Number of people you currently help with rishta services (estimate okay)",
+          "back": "Back",
+          "continue": "Continue"
+        },
+        "step3": {
+          "title": "Payment & Terms",
+          "feeStructure": "📋 Fee Structure",
+          "applicationFee": "Application Fee (Non-refundable)",
+          "registrationFee": "Registration Fee (Upon Approval)",
+          "totalInvestment": "Total Investment",
+          "feeNote": "💰 Application fee is required now. Registration fee payable only after approval (14-day review). In-person verifications are billed at PKR 20,000 when both parties agree; after a 20% portal fee, you receive PKR 16,000.",
+          "paymentInstructions": "🏦 Payment Instructions",
+          "bank": "Bank:",
+          "bankName": "Habib Bank Limited (HBL)",
+          "accountTitle": "Account Title:",
+          "accountTitleName": "IMJD YOUR DIGITAL MEDIA PARTNER",
+          "accountNumber": "Account Number:",
+          "accountNumberValue": "50347000837855",
+          "depositNote": "⚠️ Deposit PKR 20,000 now and upload proof below",
+          "uploadProof": "Upload Payment Proof (Screenshot/Receipt) *",
+          "uploadPlaceholder": "Click to upload or drag and drop",
+          "uploadHint": "PNG, JPG, or PDF up to 5MB",
+          "termsAccept": "I understand and accept the {termsLink}. I acknowledge that the application fee is non-refundable and that approval is subject to review (14-day SLA).",
+          "termsLink": "Terms & Conditions",
+          "nextSteps": "Next Steps:",
+          "nextStepsNote": "After submission, our team will review your application within 14 days. You'll receive an email with approval status. If approved, you'll pay the PKR 200,000 registration fee and receive your license.",
+          "back": "Back",
+          "submit": "Submit Application"
+        }
+      },
+      "landing": {
+        "heroRibbon": "38 Cities • 20% Commission • Weekly Payouts",
+        "heroTitlePrefix": "Partner With",
+        "heroTitleHighlight": "Licensed Bureaus",
+        "heroSubtitle": "Connect with verified marriage bureaus across Pakistan or become a partner and earn lifetime commissions",
+        "heading": "Why Partner With Us?",
+        "stats": {
+          "licenseValue": "PKR 200K",
+          "licenseLabel": "One-Time License Fee",
+          "commissionValue": "20%",
+          "commissionLabel": "Lifetime Commission",
+          "cityCapValue": "20",
+          "cityCapLabel": "Max Bureaus Per City"
+        },
+        "benefits": {
+          "commissionTitle": "20% Lifetime Commission",
+          "commissionDesc": "Earn PKR 799.80/month for every member you refer, for as long as they remain subscribed",
+          "verificationTitle": "80% Verification Fees",
+          "verificationDesc": "Receive PKR 20,000 per verification when both parties approve; payout is PKR 16,000 after 20% portal fee",
+          "payoutsTitle": "Weekly Payouts",
+          "payoutsDesc": "Automatic weekly payments (Monday-Sunday cycle) directly to your bank account",
+          "territoryTitle": "Exclusive Territory",
+          "territoryDesc": "Only 20 licensed bureaus per city - secure your territory and build your business",
+          "dashboardTitle": "Digital Dashboard",
+          "dashboardDesc": "Track referrals, commissions, and member activity in real-time through your bureau portal",
+          "supportTitle": "Support & Training",
+          "supportDesc": "Comprehensive onboarding, marketing materials, and ongoing support from our team"
+        },
+        "ctaTitle": "Become a Partner Bureau",
+        "investment": "Total Investment: PKR 220,000 (PKR 20,000 application fee + PKR 200,000 registration fee)",
+        "territory": "Territory Limit: 20 bureaus per city maximum",
+        "requirements": "Requirements: Valid CNIC, business registration (or application), physical office",
+        "commission": "Commission Structure: 20% of PKR 3,999 = PKR 799.80/member/month",
+        "verification": "Verification Payout: PKR 20,000 charged when both parties agree; bureau receives PKR 16,000 after 20% portal fee",
+        "support": "Support: Training, marketing assets, and onboarding guidance",
+        "apply": "Apply to Become a Partner",
+        "browseCities": "Browse priority cities and secure your slot",
+        "citiesTitle": "Available Cities ({count})",
+        "citiesNote": "Priority cities with limited slots",
+        "contact": "Need help? Contact support@internationalrishta.com",
+        "cities": [
+          "Karachi",
+          "Lahore",
+          "Islamabad",
+          "Rawalpindi",
+          "Faisalabad",
+          "Multan",
+          "Peshawar",
+          "Quetta",
+          "Sialkot",
+          "Gujranwala",
+          "Hyderabad",
+          "Bahawalpur",
+          "Sargodha",
+          "Sukkur",
+          "Larkana",
+          "Mardan",
+          "Abbottabad",
+          "Sahiwal",
+          "Okara",
+          "Jhang",
+          "Sheikhupura",
+          "Rahim Yar Khan",
+          "Kasur",
+          "Gujrat",
+          "Dera Ghazi Khan",
+          "Nawabshah",
+          "Mirpur Khas",
+          "Chiniot",
+          "Kamoke",
+          "Mandi Burewala",
+          "Jhelum",
+          "Sadiqabad",
+          "Jacobabad",
+          "Shikarpur",
+          "Khanewal",
+          "Hafizabad",
+          "Kohat",
+          "Muzaffargarh"
+        ]
+      }
+    },
+    "footer": {
+      "copyright": "© 2024 International Rishta — A project by IMJD Your Digital Media Partner",
+      "contact": "Contact",
+      "helpline": "Helpline",
+      "email": "info@internationalrishta.com",
+      "address": "8 The Green STE A, Dover, Delaware, USA 19901",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "hero": {
+      "headline": "Find what lasts, in time",
+      "subheadline": "Pakistan's trusted rishta platform — verified profiles, respectful connections, guided by patience",
+      "cta": "Create Your Profile",
+      "secondaryCta": "How It Works",
+      "ribbon": "Serving Pakistan today • International messaging coming soon"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Your journey to finding a meaningful connection starts here",
+      "step1": {
+        "title": "Create Your Profile",
+        "description": "Sign up with email, phone, or Google. Complete your profile with photos and preferences."
+      },
+      "step2": {
+        "title": "Get Verified",
+        "description": "Upload ID and verification photos. Our agents review within 30 minutes for your safety."
+      },
+      "step3": {
+        "title": "Discover Matches",
+        "description": "Browse verified profiles based on your filters. Swipe yes on those who interest you."
+      },
+      "step4": {
+        "title": "Start Conversations",
+        "description": "When both parties express interest, start chatting in our secure, encrypted messaging."
+      },
+      "step5": {
+        "title": "Unlock Video Calls",
+        "description": "Earn points through engagement. Unlock video calls after meeting time and points requirements."
+      },
+      "step6": {
+        "title": "Meet In Person",
+        "description": "Optional: Request in-person verification through our trusted Marriage Bureau partners."
+      }
+    },
+    "trust": {
+      "title": "Built on Trust & Safety",
+      "subtitle": "Your privacy and security are our highest priorities",
+      "verified": {
+        "title": "Verified Profiles",
+        "description": "Every user undergoes ID and photo verification by our agents"
+      },
+      "private": {
+        "title": "Private & Encrypted",
+        "description": "End-to-end encrypted messaging. Your conversations stay between you"
+      },
+      "agents": {
+        "title": "Marriage Bureau Partners",
+        "description": "Optional in-person verification through licensed bureau agents"
+      },
+      "realtime": {
+        "title": "Real-Time Support",
+        "description": "24/7 customer support and moderation for a safe experience"
+      },
+      "cta": {
+        "title": "Ready to begin your journey?",
+        "description": "Join thousands of verified members finding meaningful connections",
+        "primary": "Get Started Free",
+        "secondary": "Learn About Safety"
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the plan that works for you. No hidden fees.",
+      "popular": "Most Popular",
+      "referral": {
+        "name": "Bureau Referral",
+        "description": "Recommended by a Marriage Bureau partner"
+      },
+      "direct": {
+        "name": "Direct Membership",
+        "description": "Sign up directly with premium features"
+      },
+      "features": {
+        "lifetime": "Lifetime 20% commission to your bureau",
+        "bureau": "Marriage Bureau support and guidance",
+        "verified": "Profile verification",
+        "messaging": "Unlimited secure messaging",
+        "points": "Points system for unlocks",
+        "support": "Standard customer support",
+        "all_referral": "Everything in Bureau Referral, plus:",
+        "boosts": "Profile boosts (3 per week)",
+        "fast_video": "Faster video call unlock",
+        "advanced": "Advanced filters and search",
+        "priority": "Priority customer support",
+        "stars": "Bonus stars and points on signup"
+      },
+      "getStarted": "Get Started",
+      "viewFull": "View Full Pricing Details"
+    },
+    "auth": {
+      "continueWithGoogle": "Continue with Google",
+      "or": "or",
+      "emailPlaceholder": "Email Address",
+      "phonePlaceholder": "Phone Number (03XX-XXXXXXX)",
+      "passwordPlaceholder": "Password (min 8 characters)",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "phoneInvalid": "Enter a valid PK phone number like 03XX-XXXXXXX",
+      "passwordStrength": "Password strength",
+      "strengthWeak": "Weak",
+      "strengthOkay": "Okay",
+      "strengthStrong": "Strong",
+      "signup": {
+        "title": "Create Your Profile",
+        "subtitle": "Start your journey to finding meaningful connections",
+        "ribbon": "Join 1,247+ Active Members",
+        "stepLabel": "Step {step} of 3",
+        "progress": "{percent}% Complete",
+        "google": "Continue with Google",
+        "orContinue": "Or continue with",
+        "namePlaceholder": "Full Name",
+        "continue": "Continue",
+        "already": "Already have an account?",
+        "signIn": "Sign In",
+        "choosePlan": "Choose Your Plan",
+        "trialTitle": "2-Day Free Trial",
+        "trialDesc": "Try all features with limited access before subscribing",
+        "trialPrice": "Free for 2 days",
+        "trialNote": "Limited swipes • Demo chatbot • No payment required",
+        "referralTitle": "Bureau Referral",
+        "referralDesc": "Recommended by a Marriage Bureau",
+        "referralPrice": "PKR 3,999/month",
+        "directTitle": "Direct Membership",
+        "directDesc": "Sign up directly with premium features",
+        "directPrice": "PKR 4,999/month",
+        "referralCodePlaceholder": "Bureau Referral Code (e.g., ROYAL-LHE)",
+        "referralCodeInvalid": "Enter a valid referral code like ROYAL-LHE (letters and dash)",
+        "back": "Back",
+        "continueToTerms": "Continue",
+        "termsTitle": "Terms & Consent",
+        "acceptTerms": "I accept the Terms of Service and Privacy Policy",
+        "termsLink": "Terms of Service",
+        "privacyLink": "Privacy Policy",
+        "acceptLocation": "I consent to geolocation tracking for match recommendations and safety verification (required for platform use)",
+        "nextStepsTitle": "Next Steps After Signup:",
+        "nextSteps": [
+          "Upload ID and verification photos",
+          "Our agents will review within 30 minutes",
+          "Complete your profile with photos and preferences",
+          "Start discovering verified matches!"
+        ],
+        "createAccount": "Create Account"
+      },
+      "signin": {
+        "title": "Welcome Back",
+        "subtitle": "Sign in to continue your journey",
+        "google": "Continue with Google",
+        "or": "Or sign in with email",
+        "emailLabel": "Email Address",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "••••••••",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "submit": "Sign In",
+        "noAccount": "Don't have an account?",
+        "createAccount": "Create Account"
+      }
+    },
+    "subscription": {
+      "counter": "{count} active members"
+    },
+    "legal": {
+      "links": {
+        "seeAlso": "See also:",
+        "and": "and",
+        "privacy": "Privacy",
+        "privacyPolicy": "Privacy Policy",
+        "terms": "Terms",
+        "termsOfService": "Terms of Service",
+        "safety": "Safety"
+      },
+      "privacy": {
+        "tag": "Privacy Policy",
+        "title": "Your privacy, our priority",
+        "effective": "Effective date: January 3, 2026",
+        "collectTitle": "What we collect",
+        "collectItems": [
+          "Account data: name, email, phone, password (hashed)",
+          "Profile data: photos, preferences, bio",
+          "Usage data: swipes, messages, device info, locale",
+          "Verification data: ID images, in-person verification artifacts"
+        ],
+        "useTitle": "How we use it",
+        "useItems": [
+          "Match recommendations and discovery ranking",
+          "Fraud prevention, safety reviews, and moderation",
+          "Payments and bureau commission calculations",
+          "Product analytics to improve the experience"
+        ],
+        "shareTitle": "Data sharing",
+        "shareItems": [
+          "Payment processors (JazzCash, EasyPaisa, banks) for billing",
+          "Marriage Bureau partners for in-person verification (only with consent)",
+          "Vendors for infrastructure (Supabase, hosting, email)",
+          "Law enforcement when legally required"
+        ],
+        "controlTitle": "Your controls",
+        "controlItems": [
+          "Access/edit profile and preferences in your account",
+          "Delete account via settings or by emailing privacy@internationalrishta.com",
+          "Request data export by contacting support",
+          "Control notifications in app settings"
+        ],
+        "contact": "For questions, contact <email>privacy@internationalrishta.com</email>",
+        "seeAlso": "See also: Terms of Service and Safety"
+      },
+      "terms": {
+        "tag": "Terms of Service",
+        "title": "Know your rights and responsibilities",
+        "effective": "Effective date: January 3, 2026",
+        "eligibilityTitle": "1. Eligibility",
+        "eligibilityDesc": "You must be 18+ and legally able to enter into agreements. Accounts may be suspended for fraud, harassment, or policy violations.",
+        "useTitle": "2. Use of Service",
+        "useItems": [
+          "No harassment, hate speech, or abusive behavior.",
+          "No impersonation or sharing of others' private information.",
+          "Keep communications on-platform; off-platform sharing is at your own risk."
+        ],
+        "paymentsTitle": "3. Payments & Fees",
+        "paymentsItems": [
+          "Subscriptions renew monthly until cancelled.",
+          "In-person verification: PKR 20,000 when both parties agree; 20% platform fee, PKR 16,000 to bureau.",
+          "Application and registration fees for bureaus are non-refundable."
+        ],
+        "verificationTitle": "4. Verification",
+        "verificationDesc": "You agree to provide accurate information. Verification photos/IDs are used for safety checks. In-person verification is optional but adds trust.",
+        "conductTitle": "5. Content & Conduct",
+        "conductItems": [
+          "No explicit content, scams, or solicitation.",
+          "Respect consent in all interactions.",
+          "We may moderate, suspend, or remove content that violates these terms."
+        ],
+        "liabilityTitle": "6. Liability",
+        "liabilityDesc": "Service is provided 'as is'. We are not liable for offline meetings or outcomes. Use personal judgment and safety guidelines.",
+        "contact": "For questions, contact <email>support@internationalrishta.com</email>",
+        "seeAlso": "See also: Privacy Policy and Safety"
+      },
+      "about": {
+        "tag": "About International Rishta",
+        "title": "Connecting hearts with trust and technology",
+        "subtitle": "Built in Pakistan for the world, with safety and respect at the core.",
+        "stats": {
+          "profilesTitle": "200K+ Profiles",
+          "profilesDesc": "Growing community across 38 cities with bureau partners.",
+          "verificationTitle": "Verification First",
+          "verificationDesc": "ID, photo, and optional in-person checks to keep members safe.",
+          "bureauTitle": "Partner Bureaus",
+          "bureauDesc": "Licensed bureaus earn lifetime commissions and deliver verifications."
+        },
+        "missionTitle": "Our mission",
+        "missionDesc": "To build a respectful, secure platform that helps families and individuals find meaningful, lasting matches with confidence.",
+        "howTitle": "How we work",
+        "howItems": [
+          "Verified profiles, swipe discovery, secure messaging, and video unlocks.",
+          "Bureau partners handle in-person verification and earn commissions.",
+          "Transparent pricing: PKR 3,999 (referral) / PKR 4,999 (direct); verification PKR 20,000 with 20% platform fee."
+        ],
+        "contactTitle": "Contact",
+        "contactDesc": "Email us at <email>info@internationalrishta.com</email> or call our helpline.",
+        "seeAlso": "See also: Privacy, Terms, Safety"
+      },
+      "contact": {
+        "tag": "Contact",
+        "title": "We're here to help",
+        "subtitle": "Reach out for support, partnerships, or press.",
+        "emailTitle": "Email",
+        "emailValue": "support@internationalrishta.com",
+        "helplineTitle": "Helpline",
+        "helplineValue": "+92-3XX-XXXXXXX (9am-9pm PKT)",
+        "addressTitle": "Address",
+        "addressValue": "8 The Green STE A, Dover, Delaware, USA 19901",
+        "seeAlso": "See also: Privacy and Terms"
+      },
+      "safety": {
+        "tag": "Safety",
+        "title": "Stay safe while you connect",
+        "subtitle": "Our top guidelines to keep you protected on and off the platform.",
+        "onPlatformTitle": "On-platform safety",
+        "onPlatformItems": [
+          "Verify your profile; keep your info accurate.",
+          "Use in-app messaging and video before meeting.",
+          "Report suspicious behavior; we moderate swiftly."
+        ],
+        "meetingTitle": "Meeting in person",
+        "meetingItems": [
+          "Meet in public places first; share plans with a trusted person.",
+          "Bring ID for bureau verifications; confirm agent identity.",
+          "Never send money or share financial details."
+        ],
+        "verificationTitle": "Verification & fees",
+        "verificationDesc": "In-person verification costs PKR 20,000 when both parties agree. 20% platform fee applies; PKR 16,000 goes to the bureau. Receipts are issued via the platform.",
+        "helpTitle": "Need help?",
+        "helpDesc": "Contact support or your assigned bureau. Urgent issues: report via the app and email <email>safety@internationalrishta.com</email>.",
+        "seeAlso": "See also: Privacy and Terms"
+      }
+    }
+  }
+}

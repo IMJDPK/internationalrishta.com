@@ -1,0 +1,120 @@
+// Custom TSX Snippets for Faster Development
+{
+  "Functional Component": {
+    "prefix": "fc",
+    "body": [
+      "'use client';",
+      "",
+      "interface ${1:Component}Props {",
+      "  $2",
+      "}",
+      "",
+      "export default function ${1:Component}({ $3 }: ${1:Component}Props) {",
+      "  return (",
+      "    <div className=\"$4\">",
+      "      $0",
+      "    </div>",
+      "  );",
+      "}"
+    ],
+    "description": "Create a client-side functional component"
+  },
+  
+  "Server Component": {
+    "prefix": "sc",
+    "body": [
+      "interface ${1:Component}Props {",
+      "  $2",
+      "}",
+      "",
+      "export default async function ${1:Component}({ $3 }: ${1:Component}Props) {",
+      "  return (",
+      "    <div className=\"$4\">",
+      "      $0",
+      "    </div>",
+      "  );",
+      "}"
+    ],
+    "description": "Create a server component"
+  },
+  
+  "Use State Hook": {
+    "prefix": "us",
+    "body": [
+      "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState$2($3);"
+    ],
+    "description": "useState hook"
+  },
+  
+  "Use Effect Hook": {
+    "prefix": "ue",
+    "body": [
+      "useEffect(() => {",
+      "  $1",
+      "}, [$2]);"
+    ],
+    "description": "useEffect hook"
+  },
+  
+  "Framer Motion Div": {
+    "prefix": "motion",
+    "body": [
+      "<motion.div",
+      "  initial={{ opacity: 0, y: 20 }}",
+      "  animate={{ opacity: 1, y: 0 }}",
+      "  transition={{ duration: 0.5 }}",
+      "  className=\"$1\"",
+      ">",
+      "  $0",
+      "</motion.div>"
+    ],
+    "description": "Framer Motion animated div"
+  },
+  
+  "Tailwind Button": {
+    "prefix": "btn",
+    "body": [
+      "<button",
+      "  onClick={$1}",
+      "  className=\"bg-gold-500 hover:bg-gold-600 text-white font-bold py-3 px-6 rounded-card transition-colors\"",
+      ">",
+      "  $0",
+      "</button>"
+    ],
+    "description": "Styled Tailwind button"
+  },
+  
+  "Next Link": {
+    "prefix": "link",
+    "body": [
+      "<Link",
+      "  href=\"/${locale}/$1\"",
+      "  className=\"$2\"",
+      ">",
+      "  $0",
+      "</Link>"
+    ],
+    "description": "Next.js Link with locale"
+  },
+  
+  "Console Log": {
+    "prefix": "cl",
+    "body": [
+      "console.log('$1:', $1);"
+    ],
+    "description": "Console log with label"
+  },
+  
+  "Try Catch": {
+    "prefix": "tc",
+    "body": [
+      "try {",
+      "  $1",
+      "} catch (error) {",
+      "  console.error('Error:', error);",
+      "  $2",
+      "}"
+    ],
+    "description": "Try catch block"
+  }
+}
