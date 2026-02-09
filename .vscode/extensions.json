@@ -4,30 +4,32 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
-    
+
     // Gen Z Aesthetics
     "enkia.tokyo-night",
     "vscode-icons-team.vscode-icons",
     "PKief.material-icon-theme",
-    
+
     // Productivity Boosters
     "formulahendry.auto-rename-tag",
     "formulahendry.auto-close-tag",
     "christian-kohler.path-intellisense",
     "WallabyJs.console-ninja",
-    
+
     // Git & Collaboration
     "eamodio.gitlens",
     "GitHub.copilot",
-    
+
     // Next.js & React
     "dsznajder.es7-react-js-snippets",
     "styled-components.vscode-styled-components",
-    
+
     // Quality of Life
     "usernamehw.errorlens",
     "streetsidesoftware.code-spell-checker",
     "wayou.vscode-todo-highlight",
-    "oderwat.indent-rainbow"
+    "oderwat.indent-rainbow",
+    "anthropic.claude-code",
+    "ms-vscode-remote.remote-ssh-edit"
   ]
 }

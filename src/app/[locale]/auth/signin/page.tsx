@@ -13,13 +13,28 @@ export default function SigninPage() {
   const locale = useLocale();
   const t = useTranslations("common.auth.signin");
   const router = useRouter();
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const getAuthErrorMessage = (message: string) => {
+    const normalized = message.toLowerCase();
+    if (
+      normalized.includes("networkerror") ||
+      normalized.includes("failed to fetch")
+    ) {
+      return t("networkError");
+    }
+    return message;
+  };
 
   const handleGoogleSignin = async () => {
     setError("");
@@ -28,10 +43,10 @@ export default function SigninPage() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/${locale}/discover`,
+        redirectTo: `${appUrl}/${locale}/discover`,
       },
     });
-    if (authError) setError(authError.message);
+    if (authError) setError(getAuthErrorMessage(authError.message));
     setIsLoading(false);
   };
 
@@ -46,7 +61,7 @@ export default function SigninPage() {
     });
 
     if (authError) {
-      setError(authError.message);
+      setError(getAuthErrorMessage(authError.message));
     } else {
       router.push(`/${locale}/discover`);
     }
@@ -148,17 +163,58 @@ export default function SigninPage() {
                   >
                     {t("passwordLabel")}
                   </label>
-                  <input
-                    id="password"
-                    type="password"
-                    placeholder={t("passwordPlaceholder")}
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
-                    required
-                  />
+                  <div className="relative">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder={t("passwordPlaceholder")}
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
+                      className="w-full pe-12 px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute inset-y-0 end-3 flex items-center text-gray-500 hover:text-gray-700"
+                      aria-label={
+                        showPassword ? t("hidePassword") : t("showPassword")
+                      }
+                    >
+                      {showPassword ? (
+                        <svg
+                          className="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                          <circle cx="12" cy="12" r="3" />
+                          <line x1="4" y1="4" x2="20" y2="20" />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">

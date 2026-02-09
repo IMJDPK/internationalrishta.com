@@ -4,9 +4,10 @@ import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import SubscriptionPaywall from "@/components/SubscriptionPaywall";
 import VideoCallModal from "@/components/VideoCallModal";
-import { useSubscription } from "@/hooks/useSubscription";
+import { createClient } from "@/lib/supabase/client";
 import Image from "next/image";
 import { useState } from "react";
+import { useEffect } from "react";
 
 interface Match {
   id: string;
@@ -14,6 +15,18 @@ interface Match {
   age: number;
   city: string;
   image: string;
+const irTeamMatch: Match = {
+  id: "welcome",
+  name: "International Rishta Team",
+  age: 0,
+  city: "Support",
+  image: "/assets/logo-golden.png",
+  lastMessage: "Welcome aboard!",
+  lastMessageTime: "Just now",
+  unreadCount: 1,
+  online: true,
+};
+
   lastMessage?: string;
   lastMessageTime?: string;
   unreadCount?: number;
@@ -50,40 +63,42 @@ const mockMatches: Match[] = [
     lastMessage: "Thank you for accepting!",
     lastMessageTime: "1h ago",
     unreadCount: 0,
-    online: false,
-  },
+const welcomeThread: Message[] = [
   {
-    id: "3",
-    name: "Fatima S.",
-    age: 24,
-    city: "Islamabad",
-    image: "/assets/profile/Pasted image (2)girls.png",
-    lastMessage: "Would love to chat more",
-    lastMessageTime: "3h ago",
-    unreadCount: 1,
-    online: true,
+    id: "welcome-1",
+    senderId: "team",
+    content:
+      "Assalam o Alaikum! Welcome to International Rishta. Share your preferences and we'll help you find the right matches.",
+    timestamp: new Date().toLocaleTimeString(),
+    read: false,
   },
 ];
-
-const mockMessages: Record<string, Message[]> = {
-  "1": [
-    {
-      id: "1",
-      senderId: "1",
-      content: "Assalam o Alaikum! Thank you for connecting.",
-      timestamp: "10:30 AM",
-      read: true,
-    },
-    {
       id: "2",
       senderId: "me",
       content: "Walaikum Assalam! Nice to meet you.",
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [matches, setMatches] = useState<Match[]>([]);
       timestamp: "10:32 AM",
       read: true,
     },
     {
       id: "3",
       senderId: "1",
+  useEffect(() => {
+    const loadUser = async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user?.email) setUserEmail(user.email);
+
+      // Seed welcome conversation for all users
+      setMatches([irTeamMatch]);
+      setSelectedMatch(irTeamMatch);
+      setMessages(welcomeThread);
+    };
+    loadUser();
+  }, []);
       content: "Looking forward to connecting!",
       timestamp: "10:35 AM",
       read: false,
@@ -91,7 +106,8 @@ const mockMessages: Record<string, Message[]> = {
   ],
 };
 
-export default function MessagesPage() {
+    // For now we only have the welcome thread; in future replace with real messages
+    setMessages(match.id === "welcome" ? welcomeThread : []);
   const subscription = useSubscription();
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -131,11 +147,11 @@ export default function MessagesPage() {
       setShowPaywall(true);
       return;
     }
-    setShowVideoCall(true);
-  };
-
-  return (
-    <main className="bg-white min-h-screen">
+              <p className="text-gray-600">
+                {subscription.hasAccess
+                  ? "Connect with International Rishta team and future matches"
+                  : "Subscribe to start messaging"}
+              </p>
       <Navigation />
       <div className="pt-24 pb-20">
         <div className="container mx-auto px-4">
@@ -147,13 +163,13 @@ export default function MessagesPage() {
               </h1>
               <p className="text-gray-600">
                 {subscription.hasAccess
-                  ? "Connect with your matches"
-                  : "Subscribe to start messaging"}
-              </p>
+                  <p className="text-sm text-gray-600">
+                    {matches.length} conversation{matches.length === 1 ? "" : "s"}
+                  </p>
             </div>
 
             {/* Main Layout */}
-            <div
+                  {matches.map((match) => (
               className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden flex"
               style={{ height: "70vh" }}
             >
@@ -182,7 +198,7 @@ export default function MessagesPage() {
                           <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
                             <Image
                               src={match.image}
-                              alt={match.name}
+                              {match.name}
                               width={48}
                               height={48}
                               className="object-cover w-full h-full"
@@ -191,9 +207,11 @@ export default function MessagesPage() {
                           {match.online && (
                             <div className="absolute bottom-0 end-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
                           )}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
+                          {match.city && (
+                            <p className="text-xs text-gray-500 mt-0.5">
+                              {match.city}
+                            </p>
+                          )}
                           <div className="flex items-baseline justify-between mb-1">
                             <h3 className="font-semibold text-gray-900 truncate">
                               {match.name}, {match.age}

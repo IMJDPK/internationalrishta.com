@@ -9,6 +9,7 @@ export default function PrivacyPage() {
   const locale = useLocale();
   const t = useTranslations("common.legal.privacy");
   const links = useTranslations("common.legal.links");
+  const contact = useTranslations("common.legal.contact");
   const collectItems = t.raw("collectItems") as string[];
   const useItems = t.raw("useItems") as string[];
   const shareItems = t.raw("shareItems") as string[];
@@ -84,6 +85,25 @@ export default function PrivacyPage() {
               })}
             </div>
 
+            <div className="rounded-card border border-gold-100 bg-gold-50/60 p-5">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                {contact("title")}
+              </h3>
+              <p className="text-sm text-gray-700">
+                <span className="font-semibold">{contact("addressLabel")}</span>{" "}
+                {contact("addressValue")}
+              </p>
+              <p className="text-sm text-gray-700">
+                <span className="font-semibold">{contact("phoneLabel")}</span>{" "}
+                <a
+                  className="text-gold-700 font-semibold"
+                  href="tel:+923002027977"
+                >
+                  {contact("phoneValue")}
+                </a>
+              </p>
+            </div>
+
             <div className="text-sm text-gray-600">
               {links("seeAlso")}{" "}
               <Link
@@ -91,6 +111,20 @@ export default function PrivacyPage() {
                 href={`/${locale}/terms`}
               >
                 {links("termsOfService")}
+              </Link>
+              {", "}
+              <Link
+                className="text-gold-700 font-semibold"
+                href={`/${locale}/return-refund`}
+              >
+                {links("returnRefund")}
+              </Link>
+              {", "}
+              <Link
+                className="text-gold-700 font-semibold"
+                href={`/${locale}/shipping-service`}
+              >
+                {links("shippingService")}
               </Link>{" "}
               {links("and")}{" "}
               <Link

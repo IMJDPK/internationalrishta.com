@@ -8,12 +8,16 @@ import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SignupPage() {
   const locale = useLocale();
   const t = useTranslations("common.auth.signup");
+  const tAuth = useTranslations("common.auth");
   const router = useRouter();
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
@@ -25,9 +29,24 @@ export default function SignupPage() {
     acceptTerms: false,
     acceptLocation: false,
   });
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaQuestion, setCaptchaQuestion] = useState("");
+  const [captchaAnswer, setCaptchaAnswer] = useState(0);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const referralPattern = /^[A-Z0-9]{3,10}-[A-Z]{3}$/;
+
+  const generateCaptcha = () => {
+    const a = Math.floor(Math.random() * 9) + 1;
+    const b = Math.floor(Math.random() * 9) + 1;
+    setCaptchaQuestion(`${a} + ${b}`);
+    setCaptchaAnswer(a + b);
+    setCaptchaInput("");
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
 
   const passwordScore = (value: string) => {
     let score = 0;
@@ -40,9 +59,9 @@ export default function SignupPage() {
   };
 
   const getStrengthLabel = (score: number) => {
-    if (score <= 2) return t("strengthWeak");
-    if (score === 3) return t("strengthOkay");
-    return t("strengthStrong");
+    if (score <= 2) return tAuth("strengthWeak");
+    if (score === 3) return tAuth("strengthOkay");
+    return tAuth("strengthStrong");
   };
 
   const handleGoogleSignup = async () => {
@@ -52,7 +71,7 @@ export default function SignupPage() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/${locale}/discover`,
+        redirectTo: `${appUrl}/${locale}/discover`,
       },
     });
     if (authError) setError(authError.message);
@@ -70,11 +89,16 @@ export default function SignupPage() {
       return;
     }
     if (!isValidPhone(formData.phone)) {
-      setError(t("phoneInvalid"));
+      setError(tAuth("phoneInvalid"));
       return;
     }
     if (formData.password.length < 8) {
-      setError(t("passwordTooShort"));
+      setError(tAuth("passwordTooShort"));
+      return;
+    }
+    if (Number.parseInt(captchaInput, 10) !== captchaAnswer) {
+      setError(t("captchaError"));
+      generateCaptcha();
       return;
     }
     setError("");
@@ -114,7 +138,8 @@ export default function SignupPage() {
     if (authError) {
       setError(authError.message);
     } else {
-      router.push(`/${locale}/discover`);
+      // Redirect to payment instructions instead of discover
+      router.push(`/${locale}/payment-instructions`);
     }
     setIsLoading(false);
   };
@@ -220,46 +245,91 @@ export default function SignupPage() {
                   </div>
 
                   <div className="space-y-4">
-                    <input
-                      type="text"
-                      placeholder={t("namePlaceholder")}
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
-                    />
-                    <input
-                      type="email"
-                      placeholder={t("emailPlaceholder")}
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
-                    />
-                    <input
-                      type="tel"
-                      placeholder={t("phonePlaceholder")}
-                      value={formData.phone}
-                      onChange={(e) => {
-                        const formatted = formatPhone(e.target.value);
-                        setFormData({ ...formData, phone: formatted });
-                      }}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
-                    />
-                    <input
-                      type="password"
-                      placeholder={t("passwordPlaceholder")}
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
-                    />
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        {t("namePlaceholder")}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={t("namePlaceholder")}
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        {tAuth("emailPlaceholder")}
+                      </label>
+                      <input
+                        type="email"
+                        placeholder={tAuth("emailPlaceholder")}
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        {tAuth("phonePlaceholder")}
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder={tAuth("phonePlaceholder")}
+                        value={formData.phone}
+                        onChange={(e) => {
+                          const formatted = formatPhone(e.target.value);
+                          setFormData({ ...formData, phone: formatted });
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        {tAuth("passwordPlaceholder")}
+                      </label>
+                      <input
+                        type="password"
+                        placeholder={tAuth("passwordPlaceholder")}
+                        value={formData.password}
+                        onChange={(e) =>
+                          setFormData({ ...formData, password: e.target.value })
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div className="rounded-card border border-gold-100 bg-gold-50/60 p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-semibold text-gray-900">
+                          {t("captchaLabel")}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={generateCaptcha}
+                          className="text-xs font-semibold text-gold-700 hover:text-gold-800"
+                        >
+                          {t("captchaRefresh")}
+                        </button>
+                      </div>
+                      <p className="text-sm text-gray-700 mb-3">
+                        {t("captchaPrompt", { question: captchaQuestion })}
+                      </p>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder={t("captchaPlaceholder")}
+                        value={captchaInput}
+                        onChange={(e) => setCaptchaInput(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      />
+                    </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm text-gray-600">
-                        <span>{t("passwordStrength")}</span>
+                        <span>{tAuth("passwordStrength")}</span>
                         <span>
                           {getStrengthLabel(passwordScore(formData.password))}
                         </span>
@@ -270,8 +340,8 @@ export default function SignupPage() {
                             passwordScore(formData.password) >= 4
                               ? "bg-green-500"
                               : passwordScore(formData.password) === 3
-                              ? "bg-amber-500"
-                              : "bg-red-500"
+                                ? "bg-amber-500"
+                                : "bg-red-500"
                           }`}
                           style={{
                             width: `${
@@ -529,14 +599,14 @@ export default function SignupPage() {
                       <span className="text-gray-700">
                         {t("acceptTerms")}{" "}
                         <Link
-                          href="/terms"
+                          href={`/${locale}/terms`}
                           className="text-gold-600 hover:text-gold-700 underline"
                         >
                           {t("termsLink")}
                         </Link>{" "}
                         and{" "}
                         <Link
-                          href="/privacy"
+                          href={`/${locale}/privacy`}
                           className="text-gold-600 hover:text-gold-700 underline"
                         >
                           {t("privacyLink")}
@@ -600,6 +670,8 @@ export default function SignupPage() {
                       {isLoading ? "Submitting..." : t("createAccount")}
                     </button>
                   </div>
+
+                  {error && <p className="text-sm text-red-600">{error}</p>}
                 </motion.div>
               )}
             </motion.div>

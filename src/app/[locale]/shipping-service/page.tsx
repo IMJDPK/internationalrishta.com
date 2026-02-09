@@ -5,14 +5,14 @@ import Navigation from "@/components/Navigation";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 
-export default function TermsPage() {
+export default function ShippingServicePage() {
   const locale = useLocale();
-  const t = useTranslations("common.legal.terms");
+  const t = useTranslations("common.legal.shippingService");
   const links = useTranslations("common.legal.links");
   const contact = useTranslations("common.legal.contact");
-  const useItems = t.raw("useItems") as string[];
-  const paymentsItems = t.raw("paymentsItems") as string[];
-  const conductItems = t.raw("conductItems") as string[];
+  const timelineItems = t.raw("timelineItems") as string[];
+  const issuesItems = t.raw("issuesItems") as string[];
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-white via-teal-50 to-gold-50">
       <Navigation />
@@ -29,17 +29,17 @@ export default function TermsPage() {
           <section className="space-y-8 bg-white/80 backdrop-blur-sm rounded-card border border-gray-100 shadow-lg p-8">
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                {t("eligibilityTitle")}
+                {t("deliveryTitle")}
               </h2>
-              <p className="text-gray-700">{t("eligibilityDesc")}</p>
+              <p className="text-gray-700">{t("deliveryDesc")}</p>
             </div>
 
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                {t("useTitle")}
+                {t("timelineTitle")}
               </h2>
               <ul className="list-disc ps-6 text-gray-700 space-y-1">
-                {useItems.map((item) => (
+                {timelineItems.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
@@ -47,10 +47,10 @@ export default function TermsPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                {t("paymentsTitle")}
+                {t("issuesTitle")}
               </h2>
               <ul className="list-disc ps-6 text-gray-700 space-y-1">
-                {paymentsItems.map((item) => (
+                {issuesItems.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
@@ -58,27 +58,9 @@ export default function TermsPage() {
 
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                {t("verificationTitle")}
+                {t("locationTitle")}
               </h2>
-              <p className="text-gray-700">{t("verificationDesc")}</p>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                {t("conductTitle")}
-              </h2>
-              <ul className="list-disc ps-6 text-gray-700 space-y-1">
-                {conductItems.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">
-                {t("liabilityTitle")}
-              </h2>
-              <p className="text-gray-700">{t("liabilityDesc")}</p>
+              <p className="text-gray-700">{t("locationDesc")}</p>
             </div>
 
             <div className="text-sm text-gray-600">
@@ -124,16 +106,16 @@ export default function TermsPage() {
               {", "}
               <Link
                 className="text-teal-700 font-semibold"
-                href={`/${locale}/return-refund`}
+                href={`/${locale}/terms`}
               >
-                {links("returnRefund")}
+                {links("termsOfService")}
               </Link>
               {", "}
               <Link
                 className="text-teal-700 font-semibold"
-                href={`/${locale}/shipping-service`}
+                href={`/${locale}/return-refund`}
               >
-                {links("shippingService")}
+                {links("returnRefund")}
               </Link>{" "}
               {links("and")}{" "}
               <Link

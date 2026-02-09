@@ -7,6 +7,9 @@
       "discover": "دریافت کریں",
       "messages": "پیغامات",
       "pricing": "قیمت",
+      "policies": "پالیسیاں",
+      "returnRefund": "واپسی/ریفنڈ",
+      "shippingService": "شپنگ/سروس",
       "bureau": "میرج بیورو",
       "howItWorks": "کیسے کام کرتا ہے",
       "signIn": "سائن ان",
@@ -167,12 +170,20 @@
     },
     "footer": {
       "copyright": "© 2024 انٹرنیشنل رشتہ — IMJD Your Digital Media Partner کا ایک پراجیکٹ",
-      "contact": "رابطہ",
-      "helpline": "ہیلپ لائن",
+      "brandDesc": "تصدیق شدہ پروفائلز اور بامعنی رشتوں کے ذریعے دنیا بھر کے دل ملاتے ہیں۔",
+      "contactTitle": "رابطہ کریں",
+      "quickLinksTitle": "فوری لنکس",
+      "emailLabel": "ای میل:",
+      "phoneLabel": "فون:",
       "email": "info@internationalrishta.com",
-      "address": "8 The Green STE A, Dover, Delaware, USA 19901",
+      "phone": "+923002027977",
+      "address": "99A Block A Uet Housing Society Next to Valancia Town, Lahore, Pakistan",
       "privacy": "پرائیویسی پالیسی",
-      "terms": "استعمال کی شرائط"
+      "terms": "سروس کی شرائط",
+      "returnRefund": "واپسی اور رقم کی واپسی کی پالیسی",
+      "shippingService": "شپنگ/سروس پالیسی",
+      "about": "ہمارے بارے میں",
+      "contactLink": "رابطہ"
     },
     "hero": {
       "headline": "جو دیرپا ہو، وقت کے ساتھ تلاش کریں",
@@ -286,6 +297,11 @@
         "orContinue": "یا جاری رکھیں",
         "namePlaceholder": "پورا نام",
         "continue": "جاری رکھیں",
+        "captchaLabel": "عمر کی تصدیق",
+        "captchaPrompt": "حل کریں: {question}",
+        "captchaPlaceholder": "جواب درج کریں",
+        "captchaRefresh": "نیا سوال",
+        "captchaError": "براہ کرم عمر کی تصدیق درست طور پر کریں۔",
         "already": "کیا آپ کا اکاؤنٹ ہے؟",
         "signIn": "سائن ان",
         "choosePlan": "اپنا پلان منتخب کریں",
@@ -325,6 +341,9 @@
         "emailLabel": "ای میل ایڈریس",
         "passwordLabel": "پاس ورڈ",
         "passwordPlaceholder": "••••••••",
+        "showPassword": "پاس ورڈ دکھائیں",
+        "hidePassword": "پاس ورڈ چھپائیں",
+        "networkError": "اس وقت کنکشن ممکن نہیں۔ براہ کرم انٹرنیٹ چیک کر کے دوبارہ کوشش کریں۔",
         "rememberMe": "مجھے یاد رکھیں",
         "forgotPassword": "پاس ورڈ بھول گئے؟",
         "submit": "سائن ان",
@@ -343,7 +362,16 @@
         "privacyPolicy": "پرائیویسی پالیسی",
         "terms": "شرائط",
         "termsOfService": "سروس کی شرائط",
+        "returnRefund": "واپسی اور رقم کی واپسی کی پالیسی",
+        "shippingService": "شپنگ/سروس پالیسی",
         "safety": "حفاظت"
+      },
+      "contact": {
+        "title": "مقامی دفتر",
+        "addressLabel": "پتہ:",
+        "addressValue": "99A Block A Uet Housing Society Next to Valancia Town, Lahore, Pakistan",
+        "phoneLabel": "رابطہ نمبر:",
+        "phoneValue": "+923002027977"
       },
       "privacy": {
         "tag": "پرائیویسی پالیسی",
@@ -411,6 +439,54 @@
         "contact": "سوالات کے لیے <email>support@internationalrishta.com</email> سے رابطہ کریں",
         "seeAlso": "مزید دیکھیں: پرائیویسی پالیسی اور حفاظت"
       },
+      "returnRefund": {
+        "tag": "واپسی اور رقم کی واپسی کی پالیسی",
+        "title": "ریفنڈز اور منسوخی",
+        "effective": "موثر تاریخ: 9 فروری، 2026",
+        "overviewTitle": "خلاصہ",
+        "overviewDesc": "انٹرنیشنل رشتہ ڈیجیٹل سبسکرپشن خدمات فراہم کرتا ہے۔ رقوم کی واپسی کی اہلیت پلان کی قسم اور درخواست کے وقت پر منحصر ہے۔",
+        "eligibilityTitle": "اہل درخواستیں",
+        "eligibilityItems": [
+          "ڈپلیکیٹ چارجز یا بلنگ کی غلطی۔",
+          "ادائیگی ناکام ہو اور رسائی فراہم نہ ہو۔",
+          "پہلے چارج کے 24 گھنٹوں کے اندر سبسکرپشن منسوخی (صرف پہلی بار سبسکرائب کرنے والوں کے لیے)۔"
+        ],
+        "processTitle": "ریفنڈ کی درخواست کیسے دیں",
+        "processItems": [
+          "billing@internationalrishta.com پر اپنے اکاؤنٹ ای میل اور ادائیگی رسید کے ساتھ ای میل کریں۔",
+          "درخواست کی وجہ اور چارج کی تاریخ شامل کریں۔",
+          "ہم 5 کاروباری دنوں میں جائزہ لے کر نتیجہ بتاتے ہیں۔"
+        ],
+        "exceptionsTitle": "ناقابل واپسی صورتیں",
+        "exceptionsItems": [
+          "بیورو درخواست یا رجسٹریشن فیس۔",
+          "ذاتی تصدیق کی فیس جب سروس فراہم ہو چکی ہو۔",
+          "24 گھنٹے کی مدت کے بعد رینیول چارجز۔"
+        ],
+        "contact": "بلنگ سے متعلق سوالات کے لیے <email>billing@internationalrishta.com</email> پر رابطہ کریں"
+      },
+      "shippingService": {
+        "tag": "شپنگ/سروس پالیسی",
+        "title": "سروس کی فراہمی",
+        "effective": "موثر تاریخ: 9 فروری، 2026",
+        "deliveryTitle": "ڈیجیٹل سروس کی فراہمی",
+        "deliveryDesc": "تمام خدمات ادائیگی کی تصدیق کے بعد آپ کے انٹرنیشنل رشتہ اکاؤنٹ میں ڈیجیٹل طور پر فراہم ہوتی ہیں۔",
+        "timelineTitle": "متوقع ٹائم لائنز",
+        "timelineItems": [
+          "سبسکرپشن رسائی: کامیاب ادائیگی کے فوراً بعد۔",
+          "پروفائل تصدیق کا جائزہ: عموماً 24-48 گھنٹوں میں۔",
+          "بیورو تصدیق کا شیڈول: دونوں فریق کی رضامندی کے بعد طے ہوتا ہے۔"
+        ],
+        "issuesTitle": "اگر تاخیر ہو",
+        "issuesItems": [
+          "ایپ یا رسید ای میل میں ادائیگی کی حیثیت چیک کریں۔",
+          "تصدیق کی درخواستوں یا مطلوبہ معلومات کی کمی دیکھیں۔",
+          "سپورٹ سے رابطہ کریں تاکہ دستی جائزہ یا مدد مل سکے۔"
+        ],
+        "locationTitle": "سروس کا دائرہ",
+        "locationDesc": "ہم بنیادی طور پر پاکستان میں صارفین کو خدمات دیتے ہیں۔ بین الاقوامی رسائی محدود ہو سکتی ہے جب تک کراس بارڈر میسجنگ بیٹا میں ہے۔",
+        "contact": "سروس فراہمی میں مدد چاہیے؟ <email>support@internationalrishta.com</email> پر رابطہ کریں"
+      },
       "about": {
         "tag": "انٹرنیشنل رشتہ کے بارے میں",
         "title": "اعتماد اور ٹیکنالوجی کے ساتھ دل ملانا",
@@ -442,9 +518,9 @@
         "emailTitle": "ای میل",
         "emailValue": "support@internationalrishta.com",
         "helplineTitle": "ہیلپ لائن",
-        "helplineValue": "+92-3XX-XXXXXXX (صبح 9 تا رات 9 PKT)",
+        "helplineValue": "+923002027977 (صبح 9 تا رات 9 PKT)",
         "addressTitle": "پتہ",
-        "addressValue": "8 The Green STE A, Dover, Delaware, USA 19901",
+        "addressValue": "99A Block A Uet Housing Society Next to Valancia Town, Lahore, Pakistan",
         "seeAlso": "مزید دیکھیں: پرائیویسی اور شرائط"
       },
       "safety": {

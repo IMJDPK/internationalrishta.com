@@ -34,8 +34,12 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       className={`${poppins.variable} ${nastaliq.variable}`}
+      suppressHydrationWarning
     >
-      <body className={locale === "ur" ? "font-nastaliq" : "font-poppins"}>
+      <body
+        className={locale === "ur" ? "font-nastaliq" : "font-poppins"}
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

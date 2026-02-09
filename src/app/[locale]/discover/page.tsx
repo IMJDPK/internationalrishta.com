@@ -3,9 +3,70 @@
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import ProfileCards from "@/components/ProfileCards";
+import { createClient } from "@/lib/supabase/client";
 import { motion } from "framer-motion";
+import { useLocale } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function DiscoverPage() {
+  const router = useRouter();
+  const locale = useLocale();
+  const searchParams = useSearchParams();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const checkAuthAndProfile = async () => {
+      const supabase = createClient();
+
+      // Check if there's an OAuth code in the URL
+      const code = searchParams.get("code");
+      if (code) {
+        // Exchange code for session
+        await supabase.auth.exchangeCodeForSession(code);
+        // Remove code from URL
+        router.replace(`/${locale}/discover`);
+      }
+
+      // Get current user
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
+
+      if (authUser) {
+        // Check if user has at least a city set; don't loop endlessly for missing optional fields
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("city")
+          .eq("id", authUser.id)
+          .single();
+
+        if (!profile || !profile.city) {
+          router.push(`/${locale}/profile`);
+          return;
+        }
+
+        setUser(authUser);
+      }
+
+      setIsCheckingAuth(false);
+    };
+
+    checkAuthAndProfile();
+  }, [searchParams, router, locale]);
+
+  if (isCheckingAuth) {
+    return (
+      <main className="bg-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="bg-white">
       <Navigation />

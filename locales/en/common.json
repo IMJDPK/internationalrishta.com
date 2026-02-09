@@ -7,6 +7,9 @@
       "discover": "Discover",
       "messages": "Messages",
       "pricing": "Pricing",
+      "policies": "Policies",
+      "returnRefund": "Return/Refund",
+      "shippingService": "Shipping/Service",
       "bureau": "Marriage Bureaus",
       "howItWorks": "How It Works",
       "signIn": "Sign In",
@@ -167,12 +170,20 @@
     },
     "footer": {
       "copyright": "© 2024 International Rishta — A project by IMJD Your Digital Media Partner",
-      "contact": "Contact",
-      "helpline": "Helpline",
+      "brandDesc": "Connecting hearts worldwide through verified profiles and meaningful relationships.",
+      "contactTitle": "Contact Us",
+      "quickLinksTitle": "Quick Links",
+      "emailLabel": "Email:",
+      "phoneLabel": "Phone:",
       "email": "info@internationalrishta.com",
-      "address": "8 The Green STE A, Dover, Delaware, USA 19901",
+      "phone": "+923002027977",
+      "address": "99A Block A Uet Housing Society Next to Valancia Town, Lahore, Pakistan",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "returnRefund": "Return & Refund Policy",
+      "shippingService": "Shipping/Service Policy",
+      "about": "About Us",
+      "contactLink": "Contact"
     },
     "hero": {
       "headline": "Find what lasts, in time",
@@ -286,6 +297,11 @@
         "orContinue": "Or continue with",
         "namePlaceholder": "Full Name",
         "continue": "Continue",
+        "captchaLabel": "Age check",
+        "captchaPrompt": "Solve: {question}",
+        "captchaPlaceholder": "Type the answer",
+        "captchaRefresh": "New question",
+        "captchaError": "Please answer the age check correctly.",
         "already": "Already have an account?",
         "signIn": "Sign In",
         "choosePlan": "Choose Your Plan",
@@ -325,6 +341,9 @@
         "emailLabel": "Email Address",
         "passwordLabel": "Password",
         "passwordPlaceholder": "••••••••",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "networkError": "Unable to connect right now. Please check your internet connection and try again.",
         "rememberMe": "Remember me",
         "forgotPassword": "Forgot password?",
         "submit": "Sign In",
@@ -343,7 +362,16 @@
         "privacyPolicy": "Privacy Policy",
         "terms": "Terms",
         "termsOfService": "Terms of Service",
+        "returnRefund": "Return & Refund Policy",
+        "shippingService": "Shipping/Service Policy",
         "safety": "Safety"
+      },
+      "contact": {
+        "title": "Local office",
+        "addressLabel": "Address:",
+        "addressValue": "99A Block A Uet Housing Society Next to Valancia Town, Lahore, Pakistan",
+        "phoneLabel": "Contact number:",
+        "phoneValue": "+923002027977"
       },
       "privacy": {
         "tag": "Privacy Policy",
@@ -411,6 +439,54 @@
         "contact": "For questions, contact <email>support@internationalrishta.com</email>",
         "seeAlso": "See also: Privacy Policy and Safety"
       },
+      "returnRefund": {
+        "tag": "Return & Refund Policy",
+        "title": "Refunds and cancellations",
+        "effective": "Effective date: February 9, 2026",
+        "overviewTitle": "Overview",
+        "overviewDesc": "International Rishta provides digital subscription services. Refund eligibility depends on the plan type and the timing of your request.",
+        "eligibilityTitle": "Eligible requests",
+        "eligibilityItems": [
+          "Duplicate charges or billing errors.",
+          "Failed payment where access was not granted.",
+          "Subscription cancellations within 24 hours of the first charge (first-time subscribers only)."
+        ],
+        "processTitle": "How to request a refund",
+        "processItems": [
+          "Email billing@internationalrishta.com with your account email and payment receipt.",
+          "Include the reason for the request and the date of the charge.",
+          "We review requests within 5 business days and notify you of the outcome."
+        ],
+        "exceptionsTitle": "Non-refundable cases",
+        "exceptionsItems": [
+          "Bureau application or registration fees.",
+          "In-person verification fees once the service is delivered.",
+          "Renewal charges after the 24-hour window."
+        ],
+        "contact": "For billing questions, contact <email>billing@internationalrishta.com</email>"
+      },
+      "shippingService": {
+        "tag": "Shipping/Service Policy",
+        "title": "Service delivery",
+        "effective": "Effective date: February 9, 2026",
+        "deliveryTitle": "Digital service delivery",
+        "deliveryDesc": "All services are delivered digitally through your International Rishta account after payment confirmation.",
+        "timelineTitle": "Expected timelines",
+        "timelineItems": [
+          "Subscription access: immediately after successful payment.",
+          "Profile verification review: typically within 24-48 hours.",
+          "Bureau verification scheduling: coordinated after both parties agree."
+        ],
+        "issuesTitle": "If you experience delays",
+        "issuesItems": [
+          "Confirm your payment status in the app or receipt email.",
+          "Check for verification requests or missing information.",
+          "Contact support for manual review or assistance."
+        ],
+        "locationTitle": "Service area",
+        "locationDesc": "We primarily serve users in Pakistan. International access may be limited while cross-border messaging is in beta.",
+        "contact": "Need help with service delivery? Contact <email>support@internationalrishta.com</email>"
+      },
       "about": {
         "tag": "About International Rishta",
         "title": "Connecting hearts with trust and technology",
@@ -442,9 +518,9 @@
         "emailTitle": "Email",
         "emailValue": "support@internationalrishta.com",
         "helplineTitle": "Helpline",
-        "helplineValue": "+92-3XX-XXXXXXX (9am-9pm PKT)",
+        "helplineValue": "+923002027977 (9am-9pm PKT)",
         "addressTitle": "Address",
-        "addressValue": "8 The Green STE A, Dover, Delaware, USA 19901",
+        "addressValue": "99A Block A Uet Housing Society Next to Valancia Town, Lahore, Pakistan",
         "seeAlso": "See also: Privacy and Terms"
       },
       "safety": {
