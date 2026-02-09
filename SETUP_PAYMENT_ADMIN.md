@@ -275,7 +275,7 @@ You now have:
 **Next Steps:**
 
 - Test the complete flow with real accounts
-- Deploy to production (hosterpk.com)
+- Deploy to production (internationalrishta.com)
 - Start accepting real payments!
 
 **Need help?** Review `ADMIN_GUIDE.md` for detailed usage instructions.

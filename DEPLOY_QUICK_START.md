@@ -1,10 +1,11 @@
 # 🎯 Deploy to Production - Quick Start
 
 ## Prerequisites
+
 - GitHub account
 - Supabase account (free tier OK)
 - Vercel account (free tier OK)
-- Domain: hosterpk.com
+- Domain: internationalrishta.com
 
 ---
 
@@ -31,8 +32,8 @@
 
 4. **Configure Auth:**
    - Authentication → URL Configuration
-   - Site URL: `https://hosterpk.com`
-   - Redirect URLs: `https://hosterpk.com/**`
+   - Site URL: `https://internationalrishta.com`
+   - Redirect URLs: `https://internationalrishta.com/**`
 
 ---
 
@@ -65,7 +66,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<from Supabase step 3>
 SUPABASE_SERVICE_ROLE_KEY=<from Supabase step 3>
 NEXT_PUBLIC_DAILY_API_KEY=0e11919686e89e5720f0b76083c804634ebe069749b2dc58128482f3500b1d7b
 NEXT_PUBLIC_DAILY_DOMAIN=internationalrishta.daily.co
-NEXT_PUBLIC_APP_URL=https://hosterpk.com
+NEXT_PUBLIC_APP_URL=https://internationalrishta.com
 NODE_ENV=production
 ```
 
@@ -79,11 +80,11 @@ NODE_ENV=production
 
 1. **Add Domain in Vercel:**
    - Settings → Domains
-   - Add: `hosterpk.com`
+   - Add: `internationalrishta.com`
    - Copy the DNS records shown
 
 2. **Update DNS at Your Registrar:**
-   - Go to your domain registrar (where you bought hosterpk.com)
+   - Go to your domain registrar (where you bought internationalrishta.com)
    - Add CNAME record:
      ```
      Type: CNAME
@@ -101,7 +102,7 @@ NODE_ENV=production
 
 ## Step 5: Test (5 minutes)
 
-1. Visit https://hosterpk.com
+1. Visit https://internationalrishta.com
 2. Click through pages (English and Urdu)
 3. Try signing up with test email
 4. Check Supabase Dashboard → Auth → Users
@@ -113,6 +114,7 @@ NODE_ENV=production
 ## Troubleshooting
 
 ### Build Fails
+
 ```bash
 # Test locally first
 npm run build
@@ -124,11 +126,13 @@ git push
 ```
 
 ### Domain Not Loading
+
 - Wait 30 minutes for DNS propagation
 - Check https://dnschecker.org
 - Try incognito mode (bypass cache)
 
 ### Auth Not Working
+
 - Verify `NEXT_PUBLIC_APP_URL` in Vercel env vars
 - Check Supabase redirect URLs include your domain
 - Check browser console for errors (F12)
@@ -137,9 +141,10 @@ git push
 
 ## Total Time: ~35 minutes
 
-After this, your site is **LIVE** at https://hosterpk.com 🎉
+After this, your site is **LIVE** at https://internationalrishta.com 🎉
 
 **Next:**
+
 - Set up payment gateway (RAAST)
 - Configure email service (Resend)
 - Add monitoring (optional)

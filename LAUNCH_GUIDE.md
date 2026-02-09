@@ -1,6 +1,6 @@
 # International Rishta - Launch Guide
 
-**Domain:** hosterpk.com  
+**Domain:** internationalrishta.com  
 **Payment:** RAAST via JazzCash (03002027977) - Jawad Khalid Khan  
 **Date:** January 3, 2026
 
@@ -20,10 +20,11 @@ git push origin main
 # Just connect GitHub repo at vercel.com, it auto-deploys
 
 # 3. Check deployment
-# Visit: https://hosterpk.com
+# Visit: https://internationalrishta.com
 ```
 
 **Prerequisites before quick deploy:**
+
 - ✅ Supabase project created with schema deployed
 - ✅ Environment variables set in Vercel dashboard
 - ✅ Domain DNS pointing to Vercel
@@ -58,7 +59,7 @@ RAAST_WEBHOOK_SECRET=your_webhook_secret
 RESEND_API_KEY=your_resend_key
 
 # App Config
-NEXT_PUBLIC_APP_URL=https://hosterpk.com
+NEXT_PUBLIC_APP_URL=https://internationalrishta.com
 NODE_ENV=development
 ```
 
@@ -74,7 +75,6 @@ NODE_ENV=development
    - Region: Choose closest to Pakistan (Singapore or India)
    - Password: Store securely
 3. **Get credentials:**
-
    - Go to Settings → API → Copy `Project URL` and `anon key`
    - Paste into `.env.local`
 
@@ -88,9 +88,9 @@ NODE_ENV=development
 
 5. **Enable Auth providers:**
    - Dashboard → Authentication → Providers
-  - Enable: Google OAuth
-  - Add redirect URL: `https://hosterpk.com/en/auth/callback`
-  - (Optional for local dev): `http://localhost:3000/en/auth/callback`
+
+- Enable: Google OAuth
+   - Add redirect URL: `https://internationalrishta.com/en/auth/callback`
 
 **✅ Action:** Test local auth flow with `npm run dev` on signup page.
 
@@ -115,7 +115,6 @@ NODE_ENV=development
 ### Step 2.1: Register with RAAST
 
 1. **Contact:** RAAST (Pakistani payment gateway)
-
    - Website: https://raast.npl.org.pk/ (or check with JazzCash partner)
    - Account setup: Provide business details + Jawad Khalid Khan info
    - Get: Merchant ID, API Key, Webhook secret
@@ -191,7 +190,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendWelcomeEmail(email: string, name: string) {
   await resend.emails.send({
-    from: "noreply@hosterpk.com",
+    from: "noreply@internationalrishta.com",
     to: email,
     subject: "Welcome to International Rishta",
     html: `<h1>Welcome ${name}!</h1><p>Your 2-day trial starts now.</p>`,
@@ -200,10 +199,10 @@ export async function sendWelcomeEmail(email: string, name: string) {
 
 export async function sendBureauApprovalEmail(
   bureauEmail: string,
-  code: string
+  code: string,
 ) {
   await resend.emails.send({
-    from: "partners@hosterpk.com",
+    from: "partners@internationalrishta.com",
     to: bureauEmail,
     subject: "Bureau Registration Received",
     html: `<h1>Thank you!</h1><p>Your referral code: <strong>${code}</strong></p><p>We'll review in 14 days.</p>`,
@@ -213,10 +212,10 @@ export async function sendBureauApprovalEmail(
 export async function sendPaymentConfirmation(
   email: string,
   reference: string,
-  amount: number
+  amount: number,
 ) {
   await resend.emails.send({
-    from: "payments@hosterpk.com",
+    from: "payments@internationalrishta.com",
     to: email,
     subject: `Payment Confirmed - PKR ${amount}`,
     html: `<h1>Payment Received</h1><p>Reference: ${reference}</p>`,
@@ -253,12 +252,11 @@ export async function sendPaymentConfirmation(
 
 4. **Configure Authentication:**
    - Go to **Authentication → URL Configuration**
-   - Set **Site URL:** `https://hosterpk.com`
+   - Set **Site URL:** `https://internationalrishta.com`
    - Add **Redirect URLs:**
-     - `https://hosterpk.com/en/auth/callback`
-     - `https://hosterpk.com/ur/auth/callback`
-     - `https://hosterpk.com/**` (wildcard for all routes)
-   
+     - `https://internationalrishta.com/en/auth/callback`
+     - `https://internationalrishta.com/ur/auth/callback`
+     - `https://internationalrishta.com/**` (wildcard for all routes)
 5. **Enable Auth Providers:**
    - Go to **Authentication → Providers**
    - Enable **Email** (already enabled by default)
@@ -280,6 +278,7 @@ export async function sendPaymentConfirmation(
 **A. Connect Repository to Vercel**
 
 1. **Push your code to GitHub** (if not already):
+
    ```bash
    git add .
    git commit -m "Prepare for production deployment"
@@ -313,11 +312,12 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 NEXT_PUBLIC_DAILY_API_KEY=0e11919686e89e5720f0b76083c804634ebe069749b2dc58128482f3500b1d7b
 NEXT_PUBLIC_DAILY_DOMAIN=internationalrishta.daily.co
 
-NEXT_PUBLIC_APP_URL=https://hosterpk.com
+NEXT_PUBLIC_APP_URL=https://internationalrishta.com
 NODE_ENV=production
 ```
 
 **Optional (add when ready):**
+
 ```env
 NEXT_PUBLIC_RAAST_MERCHANT_ID=your_merchant_id
 NEXT_PUBLIC_RAAST_API_KEY=your_api_key
@@ -332,18 +332,19 @@ RESEND_API_KEY=your_resend_api_key
 
 ---
 
-### Step 4.3: Configure Custom Domain (hosterpk.com)
+### Step 4.3: Configure Custom Domain (internationalrishta.com)
 
 1. **Add Domain in Vercel:**
    - Go to **Settings → Domains**
-   - Enter: `hosterpk.com`
+   - Enter: `internationalrishta.com`
    - Click **Add**
 
 2. **Configure DNS (at your domain registrar):**
-   
+
    Vercel will show you DNS records to add. You'll need:
 
    **Option A: Using CNAME (Recommended if allowed):**
+
    ```
    Type: CNAME
    Name: @
@@ -351,6 +352,7 @@ RESEND_API_KEY=your_resend_api_key
    ```
 
    **Option B: Using A Record:**
+
    ```
    Type: A
    Name: @
@@ -358,6 +360,7 @@ RESEND_API_KEY=your_resend_api_key
    ```
 
 3. **Add www subdomain (optional):**
+
    ```
    Type: CNAME
    Name: www
@@ -374,47 +377,55 @@ RESEND_API_KEY=your_resend_api_key
 ### Step 4.4: Post-Deployment Verification
 
 **1. Test Your Site:**
-   - Visit: `https://hosterpk.com`
-   - Check both locales: `/en` and `/ur`
-   - Verify RTL layout in Urdu
-   - Test navigation between pages
+
+- Visit: `https://internationalrishta.com`
+- Check both locales: `/en` and `/ur`
+- Verify RTL layout in Urdu
+- Test navigation between pages
 
 **2. Verify Supabase Connection:**
-   - Open browser console (F12)
-   - Try signing up with test email
-   - Check Supabase Dashboard → Authentication → Users
-   - Verify user was created
+
+- Open browser console (F12)
+- Try signing up with test email
+- Check Supabase Dashboard → Authentication → Users
+- Verify user was created
 
 **3. Check Vercel Deployment:**
-   - Go to **Vercel Dashboard → Analytics**
-   - Monitor for errors in **Real-time Logs**
-   - Check build logs if issues occur
+
+- Go to **Vercel Dashboard → Analytics**
+- Monitor for errors in **Real-time Logs**
+- Check build logs if issues occur
 
 **4. Test from Different Devices:**
-   - Mobile (Android/iOS)
-   - Desktop browsers (Chrome, Safari, Firefox)
-   - Verify responsive design
+
+- Mobile (Android/iOS)
+- Desktop browsers (Chrome, Safari, Firefox)
+- Verify responsive design
 
 ---
 
 ### Step 4.5: Common Issues & Fixes
 
 **Issue: Site shows 404 or doesn't load**
+
 - Check DNS propagation: https://dnschecker.org
 - Verify domain is added in Vercel
 - Check deployment status (should be green checkmark)
 
 **Issue: Auth not working**
+
 - Verify `NEXT_PUBLIC_APP_URL` matches your domain
 - Check Supabase redirect URLs include your domain
 - Ensure all env vars are set in Vercel
 
 **Issue: Build fails**
+
 - Check Vercel build logs
 - Verify no TypeScript errors: `npm run build` locally
 - Ensure all dependencies in package.json
 
 **Issue: Environment variables not working**
+
 - All `NEXT_PUBLIC_*` vars must be set before build
 - Redeploy after adding env vars
 - Check variable names match exactly (case-sensitive)
@@ -428,10 +439,12 @@ RESEND_API_KEY=your_resend_api_key
    - View in Dashboard → Analytics tab
 
 2. **Error Tracking (Sentry):**
+
    ```bash
    npm install @sentry/nextjs
    npx @sentry/wizard@latest -i nextjs
    ```
+
    - Add `SENTRY_DSN` to Vercel env vars
 
 3. **Supabase Logs:**
@@ -517,7 +530,7 @@ RESEND_API_KEY=your_resend_api_key
 
 | Service  | Contact                      | Status             |
 | -------- | ---------------------------- | ------------------ |
-| Domain   | hosterpk.com (cPanel)        | ✅ Ready           |
+| Domain   | internationalrishta.com      | ✅ Ready           |
 | Payment  | RAAST/JazzCash - 03002027977 | ⏳ Pending setup   |
 | Supabase | https://supabase.com         | ⏳ Pending setup   |
 | Daily.co | Video subdomain              | ✅ Ready           |

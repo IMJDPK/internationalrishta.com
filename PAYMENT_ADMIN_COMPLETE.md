@@ -227,7 +227,7 @@
 
 4. **Deploy to Production** (30 min)
 
-   - Push code to hosterpk.com
+   - Push code to internationalrishta.com
    - Run SQL migration on production Supabase
    - Add yourself as admin on production
    - Test with real account
