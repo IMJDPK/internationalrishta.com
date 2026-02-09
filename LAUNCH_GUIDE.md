@@ -6,6 +6,33 @@
 
 ---
 
+## 🚀 Quick Deploy Commands (TL;DR)
+
+If you already have everything set up, here's the fast track:
+
+```bash
+# 1. Ensure you're on latest main branch
+git add .
+git commit -m "Production ready"
+git push origin main
+
+# 2. Deploy to Vercel (first time)
+# Just connect GitHub repo at vercel.com, it auto-deploys
+
+# 3. Check deployment
+# Visit: https://hosterpk.com
+```
+
+**Prerequisites before quick deploy:**
+- ✅ Supabase project created with schema deployed
+- ✅ Environment variables set in Vercel dashboard
+- ✅ Domain DNS pointing to Vercel
+- ✅ Auth redirect URLs configured in Supabase
+
+**First time?** Follow the detailed guide below ⬇️
+
+---
+
 ## 🚀 Phase 1: Environment & Infrastructure Setup
 
 ### Step 1.1: Configure `.env.local` (Local Development)
@@ -31,7 +58,7 @@ RAAST_WEBHOOK_SECRET=your_webhook_secret
 RESEND_API_KEY=your_resend_key
 
 # App Config
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=https://hosterpk.com
 NODE_ENV=development
 ```
 
@@ -61,9 +88,9 @@ NODE_ENV=development
 
 5. **Enable Auth providers:**
    - Dashboard → Authentication → Providers
-   - Enable: Google OAuth
-   - Add redirect URL: `http://localhost:3000/en/auth/callback`
-   - Later (production): `https://hosterpk.com/en/auth/callback`
+  - Enable: Google OAuth
+  - Add redirect URL: `https://hosterpk.com/en/auth/callback`
+  - (Optional for local dev): `http://localhost:3000/en/auth/callback`
 
 **✅ Action:** Test local auth flow with `npm run dev` on signup page.
 
@@ -201,63 +228,216 @@ export async function sendPaymentConfirmation(
 
 ---
 
-## 🔗 Phase 4: Domain & Deployment
+## 🔗 Phase 4: Domain & Deployment (Vercel + Supabase)
 
-### Step 4.1: Point Domain to Hosting
+### Step 4.1: Prepare Your Supabase Project for Production
 
-You're using **hosterpk.com** on cPanel.
+1. **Go to Supabase Dashboard:** https://supabase.com/dashboard
+   - Select your project or create a new one: `international-rishta-prod`
+   - Region: Choose closest to Pakistan (Singapore recommended)
 
-**Option A: Deploy on Vercel (Recommended)**
+2. **Get Production Credentials:**
+   - Go to **Settings → API**
+   - Copy:
+     - `Project URL` (looks like: `https://xxxxx.supabase.co`)
+     - `anon public` key
+     - `service_role` key (⚠️ Keep this secret!)
+   - Save these for Vercel env setup
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
+3. **Deploy Database Schema:**
+   - Go to **SQL Editor** in Supabase Dashboard
+   - Click **New Query**
+   - Open `supabase/schema.sql` from your project
+   - Copy entire content and paste into query editor
+   - Click **Run** to create all tables, functions, and policies
 
-# Deploy
-vercel
+4. **Configure Authentication:**
+   - Go to **Authentication → URL Configuration**
+   - Set **Site URL:** `https://hosterpk.com`
+   - Add **Redirect URLs:**
+     - `https://hosterpk.com/en/auth/callback`
+     - `https://hosterpk.com/ur/auth/callback`
+     - `https://hosterpk.com/**` (wildcard for all routes)
+   
+5. **Enable Auth Providers:**
+   - Go to **Authentication → Providers**
+   - Enable **Email** (already enabled by default)
+   - Enable **Google OAuth:**
+     - Get credentials from [Google Cloud Console](https://console.cloud.google.com)
+     - Create OAuth 2.0 Client ID
+     - Authorized redirect URI: Use the callback URL from Supabase
+     - Add Client ID and Secret in Supabase
 
-# Add domain: hosterpk.com → Vercel dashboard
-```
+6. **Configure Storage (for profile photos):**
+   - Go to **Storage**
+   - Create bucket: `profile-photos` (public)
+   - Create bucket: `verification-docs` (private, RLS protected)
 
-**Option B: Deploy on cPanel (SSH/Node.js)**
+---
 
-```bash
-# Build app
-npm run build
+### Step 4.2: Deploy to Vercel
 
-# Push to cPanel via cPanel file manager or git
-# Ensure Node.js installed on cPanel
-# Start with: pm2 start next start -p 3000
-```
+**A. Connect Repository to Vercel**
 
-**Choose one and complete.**
+1. **Push your code to GitHub** (if not already):
+   ```bash
+   git add .
+   git commit -m "Prepare for production deployment"
+   git push origin main
+   ```
 
-### Step 4.2: Update Environment Variables (Production)
+2. **Go to Vercel:** https://vercel.com
+   - Sign up / Login (use GitHub account for easy connection)
+   - Click **Add New... → Project**
+   - Import your repository: `internationalrishta.com`
+   - Vercel will auto-detect Next.js
 
-Go to hosting dashboard and add:
+3. **Configure Build Settings:**
+   - **Framework Preset:** Next.js (auto-detected)
+   - **Build Command:** `npm run build` (default)
+   - **Output Directory:** `.next` (default)
+   - **Install Command:** `npm install` (default)
+   - Click **Deploy** (will fail first time - that's OK, we need env vars)
+
+**B. Add Environment Variables in Vercel**
+
+1. Go to your project in Vercel Dashboard
+2. Navigate to **Settings → Environment Variables**
+3. Add these one by one (Production, Preview, Development):
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-SUPABASE_SERVICE_ROLE_KEY=...
-NEXT_PUBLIC_DAILY_API_KEY=...
-NEXT_PUBLIC_DAILY_DOMAIN=...
-NEXT_PUBLIC_RAAST_MERCHANT_ID=...
-NEXT_PUBLIC_RAAST_API_KEY=...
-RAAST_WEBHOOK_SECRET=...
-RESEND_API_KEY=...
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+NEXT_PUBLIC_DAILY_API_KEY=0e11919686e89e5720f0b76083c804634ebe069749b2dc58128482f3500b1d7b
+NEXT_PUBLIC_DAILY_DOMAIN=internationalrishta.daily.co
+
 NEXT_PUBLIC_APP_URL=https://hosterpk.com
 NODE_ENV=production
 ```
 
-### Step 4.3: Configure Supabase for Production
-
-Update auth callback URL:
-
+**Optional (add when ready):**
+```env
+NEXT_PUBLIC_RAAST_MERCHANT_ID=your_merchant_id
+NEXT_PUBLIC_RAAST_API_KEY=your_api_key
+RAAST_WEBHOOK_SECRET=your_webhook_secret
+RESEND_API_KEY=your_resend_api_key
 ```
-https://hosterpk.com/en/auth/callback
-https://hosterpk.com/ur/auth/callback
-```
+
+4. **Redeploy:**
+   - Go to **Deployments** tab
+   - Click ⋯ on latest deployment → **Redeploy**
+   - Or push a new commit to trigger auto-deployment
+
+---
+
+### Step 4.3: Configure Custom Domain (hosterpk.com)
+
+1. **Add Domain in Vercel:**
+   - Go to **Settings → Domains**
+   - Enter: `hosterpk.com`
+   - Click **Add**
+
+2. **Configure DNS (at your domain registrar):**
+   
+   Vercel will show you DNS records to add. You'll need:
+
+   **Option A: Using CNAME (Recommended if allowed):**
+   ```
+   Type: CNAME
+   Name: @
+   Value: cname.vercel-dns.com
+   ```
+
+   **Option B: Using A Record:**
+   ```
+   Type: A
+   Name: @
+   Value: 76.76.21.21
+   ```
+
+3. **Add www subdomain (optional):**
+   ```
+   Type: CNAME
+   Name: www
+   Value: cname.vercel-dns.com
+   ```
+
+4. **Wait for DNS propagation:**
+   - Usually takes 5-30 minutes
+   - Check status in Vercel Domains tab
+   - Once verified, Vercel auto-provisions SSL certificate
+
+---
+
+### Step 4.4: Post-Deployment Verification
+
+**1. Test Your Site:**
+   - Visit: `https://hosterpk.com`
+   - Check both locales: `/en` and `/ur`
+   - Verify RTL layout in Urdu
+   - Test navigation between pages
+
+**2. Verify Supabase Connection:**
+   - Open browser console (F12)
+   - Try signing up with test email
+   - Check Supabase Dashboard → Authentication → Users
+   - Verify user was created
+
+**3. Check Vercel Deployment:**
+   - Go to **Vercel Dashboard → Analytics**
+   - Monitor for errors in **Real-time Logs**
+   - Check build logs if issues occur
+
+**4. Test from Different Devices:**
+   - Mobile (Android/iOS)
+   - Desktop browsers (Chrome, Safari, Firefox)
+   - Verify responsive design
+
+---
+
+### Step 4.5: Common Issues & Fixes
+
+**Issue: Site shows 404 or doesn't load**
+- Check DNS propagation: https://dnschecker.org
+- Verify domain is added in Vercel
+- Check deployment status (should be green checkmark)
+
+**Issue: Auth not working**
+- Verify `NEXT_PUBLIC_APP_URL` matches your domain
+- Check Supabase redirect URLs include your domain
+- Ensure all env vars are set in Vercel
+
+**Issue: Build fails**
+- Check Vercel build logs
+- Verify no TypeScript errors: `npm run build` locally
+- Ensure all dependencies in package.json
+
+**Issue: Environment variables not working**
+- All `NEXT_PUBLIC_*` vars must be set before build
+- Redeploy after adding env vars
+- Check variable names match exactly (case-sensitive)
+
+---
+
+### Step 4.6: Enable Production Monitoring (Optional)
+
+1. **Vercel Analytics:**
+   - Already enabled by default
+   - View in Dashboard → Analytics tab
+
+2. **Error Tracking (Sentry):**
+   ```bash
+   npm install @sentry/nextjs
+   npx @sentry/wizard@latest -i nextjs
+   ```
+   - Add `SENTRY_DSN` to Vercel env vars
+
+3. **Supabase Logs:**
+   - Dashboard → Logs
+   - Monitor database queries, auth events
+   - Set up alerts for errors
 
 ---
 
