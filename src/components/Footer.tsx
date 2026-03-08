@@ -111,6 +111,14 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                  href={`/${locale}/about/safety`}
+                  className="hover:text-gold-400 transition-colors"
+                >
+                  {t("safety")}
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={`/${locale}/contact`}
                   className="hover:text-gold-400 transition-colors"
                 >
