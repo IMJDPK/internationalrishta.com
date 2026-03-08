@@ -224,7 +224,12 @@ export default function SafetyPage() {
           <div className="absolute bottom-0 end-0 w-96 h-96 bg-teal-500 rounded-full blur-3xl" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <motion.div initial="hidden" animate="visible" variants={fadeUp} className="max-w-3xl">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            className="max-w-3xl"
+          >
             <div className="inline-flex items-center gap-2 bg-gold-500/20 border border-gold-400/40 px-4 py-1.5 rounded-pill text-gold-300 text-sm font-semibold mb-6">
               🛡️ Safety Policy
             </div>
@@ -235,9 +240,13 @@ export default function SafetyPage() {
               </span>
             </h1>
             <p className="text-lg text-gray-300 leading-relaxed">
-              International Rishta is built on respect, transparency, and trust. These policies protect every member — please read them carefully and follow them in every interaction.
+              International Rishta is built on respect, transparency, and trust.
+              These policies protect every member — please read them carefully
+              and follow them in every interaction.
             </p>
-            <p className="mt-3 text-sm text-gray-400">Last updated: March 2026 · Effective immediately</p>
+            <p className="mt-3 text-sm text-gray-400">
+              Last updated: March 2026 · Effective immediately
+            </p>
           </motion.div>
 
           <motion.div
@@ -248,7 +257,10 @@ export default function SafetyPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
           >
             {stats.map((s) => (
-              <div key={s.label} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center">
+              <div
+                key={s.label}
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-4 text-center"
+              >
                 <p className="text-2xl font-bold text-gold-400">{s.value}</p>
                 <p className="text-xs text-gray-400 mt-1">{s.label}</p>
               </div>
@@ -277,8 +289,12 @@ export default function SafetyPage() {
               <div className="space-y-5">
                 {section.items.map((item) => (
                   <div key={item.heading}>
-                    <h3 className="font-semibold text-gray-900 mb-1">{item.heading}</h3>
-                    <p className="text-gray-700 leading-relaxed text-sm">{item.body}</p>
+                    <h3 className="font-semibold text-gray-900 mb-1">
+                      {item.heading}
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed text-sm">
+                      {item.body}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -300,22 +316,40 @@ export default function SafetyPage() {
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">In-app reporting</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  In-app reporting
+                </h3>
                 <p className="text-sm text-gray-700 mb-4">
-                  Use the Report button on any profile or conversation. Our moderation team responds within 2 hours.
+                  Use the Report button on any profile or conversation. Our
+                  moderation team responds within 2 hours.
                 </p>
-                <h3 className="font-semibold text-gray-900 mb-1">Safety email</h3>
-                <a href="mailto:safety@internationalrishta.com" className="text-red-700 font-medium text-sm hover:underline">
+                <h3 className="font-semibold text-gray-900 mb-1">
+                  Safety email
+                </h3>
+                <a
+                  href="mailto:safety@internationalrishta.com"
+                  className="text-red-700 font-medium text-sm hover:underline"
+                >
                   safety@internationalrishta.com
                 </a>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Pakistan emergency numbers</h3>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  Pakistan emergency numbers
+                </h3>
                 <ul className="text-sm text-gray-700 space-y-1.5">
-                  <li>Police: <strong>15</strong></li>
-                  <li>Rescue / Ambulance: <strong>1122</strong></li>
-                  <li>FIA Cyber Crime (fraud): <strong>9911</strong></li>
-                  <li>Women Helpline: <strong>1099</strong></li>
+                  <li>
+                    Police: <strong>15</strong>
+                  </li>
+                  <li>
+                    Rescue / Ambulance: <strong>1122</strong>
+                  </li>
+                  <li>
+                    FIA Cyber Crime (fraud): <strong>9911</strong>
+                  </li>
+                  <li>
+                    Women Helpline: <strong>1099</strong>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -333,18 +367,30 @@ export default function SafetyPage() {
             <h2 className="text-2xl font-bold mb-3">Questions about safety?</h2>
             <p className="text-gray-300 mb-6 text-sm">
               Our team is here to help.{" "}
-              <a href="mailto:safety@internationalrishta.com" className="text-gold-400 hover:text-gold-300 underline">
+              <a
+                href="mailto:safety@internationalrishta.com"
+                className="text-gold-400 hover:text-gold-300 underline"
+              >
                 safety@internationalrishta.com
               </a>
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href={`/${locale}/contact`} className="px-6 py-3 bg-gold-500 hover:bg-gold-600 text-white rounded-pill font-semibold transition-all text-sm">
+              <Link
+                href={`/${locale}/contact`}
+                className="px-6 py-3 bg-gold-500 hover:bg-gold-600 text-white rounded-pill font-semibold transition-all text-sm"
+              >
                 Contact Support
               </Link>
-              <Link href={`/${locale}/privacy`} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-pill font-semibold transition-all text-sm">
+              <Link
+                href={`/${locale}/privacy`}
+                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-pill font-semibold transition-all text-sm"
+              >
                 Privacy Policy
               </Link>
-              <Link href={`/${locale}/terms`} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-pill font-semibold transition-all text-sm">
+              <Link
+                href={`/${locale}/terms`}
+                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-pill font-semibold transition-all text-sm"
+              >
                 Terms of Service
               </Link>
             </div>

@@ -55,220 +55,228 @@ export default function DiscoverFilters() {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="bg-white rounded-card p-6 shadow-lg sticky top-32 max-h-[calc(100vh-160px)] overflow-y-auto"
+      className="bg-white rounded-card shadow-lg sticky top-32 max-h-[calc(100vh-160px)] flex flex-col overflow-hidden"
     >
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Filters</h2>
+      {/* Header - never scrolls */}
+      <div className="px-6 pt-6 pb-3 border-b border-gray-100 flex-shrink-0">
+        <h2 className="text-xl font-bold text-gray-900">Filters</h2>
+      </div>
 
-      <div className="space-y-6">
-        {/* Sect */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Sect
-          </label>
-          <select
-            value={filters.sect}
-            onChange={(e) => setFilters({ ...filters, sect: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {sects.map((sect) => (
-              <option key={sect} value={sect.toLowerCase()}>
-                {sect}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* Scrollable filter options */}
+      <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="space-y-5">
+          {/* Sect */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Sect
+            </label>
+            <select
+              value={filters.sect}
+              onChange={(e) => setFilters({ ...filters, sect: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {sects.map((sect) => (
+                <option key={sect} value={sect.toLowerCase()}>
+                  {sect}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Biradari */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Biradari
-          </label>
-          <select
-            value={filters.biradari}
-            onChange={(e) =>
-              setFilters({ ...filters, biradari: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {biradaris.map((biradari) => (
-              <option key={biradari} value={biradari.toLowerCase()}>
-                {biradari}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Biradari */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Biradari
+            </label>
+            <select
+              value={filters.biradari}
+              onChange={(e) =>
+                setFilters({ ...filters, biradari: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {biradaris.map((biradari) => (
+                <option key={biradari} value={biradari.toLowerCase()}>
+                  {biradari}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Marital Status */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Marital Status
-          </label>
-          <select
-            value={filters.maritalStatus}
-            onChange={(e) =>
-              setFilters({ ...filters, maritalStatus: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {maritalStatuses.map((status) => (
-              <option key={status} value={status.toLowerCase()}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Marital Status */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Marital Status
+            </label>
+            <select
+              value={filters.maritalStatus}
+              onChange={(e) =>
+                setFilters({ ...filters, maritalStatus: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {maritalStatuses.map((status) => (
+                <option key={status} value={status.toLowerCase()}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Education */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Education
-          </label>
-          <select
-            value={filters.education}
-            onChange={(e) =>
-              setFilters({ ...filters, education: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {educationLevels.map((level) => (
-              <option key={level} value={level.toLowerCase()}>
-                {level}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Education */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Education
+            </label>
+            <select
+              value={filters.education}
+              onChange={(e) =>
+                setFilters({ ...filters, education: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {educationLevels.map((level) => (
+                <option key={level} value={level.toLowerCase()}>
+                  {level}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Profession */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Profession
-          </label>
-          <select
-            value={filters.profession}
-            onChange={(e) =>
-              setFilters({ ...filters, profession: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {professions.map((profession) => (
-              <option key={profession} value={profession.toLowerCase()}>
-                {profession}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Profession */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Profession
+            </label>
+            <select
+              value={filters.profession}
+              onChange={(e) =>
+                setFilters({ ...filters, profession: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {professions.map((profession) => (
+                <option key={profession} value={profession.toLowerCase()}>
+                  {profession}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Smoking */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Smoking
-          </label>
-          <select
-            value={filters.smoking}
-            onChange={(e) =>
-              setFilters({ ...filters, smoking: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {yesNo.map((option) => (
-              <option key={option} value={option.toLowerCase()}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Smoking */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Smoking
+            </label>
+            <select
+              value={filters.smoking}
+              onChange={(e) =>
+                setFilters({ ...filters, smoking: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {yesNo.map((option) => (
+                <option key={option} value={option.toLowerCase()}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Drinking */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Drinking
-          </label>
-          <select
-            value={filters.drinking}
-            onChange={(e) =>
-              setFilters({ ...filters, drinking: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {yesNo.map((option) => (
-              <option key={option} value={option.toLowerCase()}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Drinking */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Drinking
+            </label>
+            <select
+              value={filters.drinking}
+              onChange={(e) =>
+                setFilters({ ...filters, drinking: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {yesNo.map((option) => (
+                <option key={option} value={option.toLowerCase()}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Relocation */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Open to Relocation
-          </label>
-          <select
-            value={filters.relocation}
-            onChange={(e) =>
-              setFilters({ ...filters, relocation: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
-          >
-            {yesNo.map((option) => (
-              <option key={option} value={option.toLowerCase()}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Relocation */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Open to Relocation
+            </label>
+            <select
+              value={filters.relocation}
+              onChange={(e) =>
+                setFilters({ ...filters, relocation: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent text-sm"
+            >
+              {yesNo.map((option) => (
+                <option key={option} value={option.toLowerCase()}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Age Range */}
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Age: {filters.ageMin} - {filters.ageMax}
-          </label>
-          <div className="flex gap-3 items-center px-1">
+          {/* Age Range */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Age: {filters.ageMin} - {filters.ageMax}
+            </label>
+            <div className="flex gap-3 items-center px-1">
+              <input
+                type="range"
+                min="18"
+                max="65"
+                value={filters.ageMin}
+                onChange={(e) =>
+                  setFilters({ ...filters, ageMin: parseInt(e.target.value) })
+                }
+                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-500"
+              />
+              <input
+                type="range"
+                min="18"
+                max="65"
+                value={filters.ageMax}
+                onChange={(e) =>
+                  setFilters({ ...filters, ageMax: parseInt(e.target.value) })
+                }
+                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-500"
+              />
+            </div>
+          </div>
+
+          {/* Search Radius */}
+          <div className="px-1">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Search Radius: {filters.radius} km
+            </label>
             <input
               type="range"
-              min="18"
-              max="65"
-              value={filters.ageMin}
+              min="10"
+              max="500"
+              step="10"
+              value={filters.radius}
               onChange={(e) =>
-                setFilters({ ...filters, ageMin: parseInt(e.target.value) })
+                setFilters({ ...filters, radius: parseInt(e.target.value) })
               }
-              className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-500"
-            />
-            <input
-              type="range"
-              min="18"
-              max="65"
-              value={filters.ageMax}
-              onChange={(e) =>
-                setFilters({ ...filters, ageMax: parseInt(e.target.value) })
-              }
-              className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-500"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-500"
             />
           </div>
         </div>
+      </div>
 
-        {/* Search Radius */}
-        <div className="px-1">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Search Radius: {filters.radius} km
-          </label>
-          <input
-            type="range"
-            min="10"
-            max="500"
-            step="10"
-            value={filters.radius}
-            onChange={(e) =>
-              setFilters({ ...filters, radius: parseInt(e.target.value) })
-            }
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-500"
-          />
-        </div>
-
+      {/* Buttons always visible at bottom */}
+      <div className="px-6 py-4 border-t border-gray-100 flex-shrink-0 space-y-2 bg-white">
         <button className="w-full bg-gold-500 hover:bg-gold-600 text-white font-bold py-3 rounded-card transition-colors">
           Apply Filters
         </button>
-
         <button
           onClick={() =>
             setFilters({
@@ -285,7 +293,7 @@ export default function DiscoverFilters() {
               radius: 50,
             })
           }
-          className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-card transition-colors"
+          className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2.5 rounded-card transition-colors text-sm"
         >
           Reset Filters
         </button>
