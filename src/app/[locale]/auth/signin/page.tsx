@@ -151,7 +151,7 @@ export default function SigninPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                    className="w-full px-4 py-3 text-base border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 min-h-11"
                     required
                   />
                 </div>
@@ -172,7 +172,7 @@ export default function SigninPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
                       }
-                      className="w-full pe-12 px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                      className="w-full pe-12 px-4 py-3 text-base border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 min-h-11"
                       required
                     />
                     <button
@@ -247,7 +247,7 @@ export default function SigninPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-4 rounded-card transition-colors"
+                  className="w-full bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-4 rounded-card transition-colors text-base min-h-11 focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
                 >
                   {isLoading ? "Signing in..." : t("submit")}
                 </button>

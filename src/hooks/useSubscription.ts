@@ -21,61 +21,38 @@ export interface SubscriptionData {
 
 /**
  * Hook to check user's subscription status and feature access
- * TODO: Connect to Supabase when auth is implemented
+ * Platform is now FREE for all users - full access to all features
  */
 export function useSubscription(): SubscriptionData {
   const [subscription, setSubscription] = useState<SubscriptionData>({
     tier: "free",
-    status: "expired",
-    hasAccess: false,
+    status: "active",
+    hasAccess: true,
     features: {
-      messaging: false,
-      videoCall: false,
-      unlimitedSwipes: false,
-      profileBoosts: false,
-      advancedFilters: false,
+      messaging: true,
+      videoCall: true,
+      unlimitedSwipes: true,
+      profileBoosts: true,
+      advancedFilters: true,
     },
   });
 
   useEffect(() => {
-    // TODO: Fetch from Supabase
-    // For now, mock data - you can test by changing tier here
-    const mockSubscription: SubscriptionData = {
-      tier: "free", // Change to 'trial', 'bureau', or 'direct' to test
-      status: "expired",
-      hasAccess: false,
-      trialEndsAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
+    // Platform is FREE - all users get full access
+    const freeSubscription: SubscriptionData = {
+      tier: "free",
+      status: "active",
+      hasAccess: true,
       features: {
-        messaging: false,
-        videoCall: false,
-        unlimitedSwipes: false,
-        profileBoosts: false,
-        advancedFilters: false,
+        messaging: true,
+        videoCall: true,
+        unlimitedSwipes: true,
+        profileBoosts: true,
+        advancedFilters: true,
       },
     };
 
-    // Grant features based on tier
-    if (mockSubscription.tier === "trial") {
-      mockSubscription.hasAccess = true;
-      mockSubscription.status = "active";
-      mockSubscription.features.messaging = true;
-      mockSubscription.features.unlimitedSwipes = true;
-    } else if (
-      mockSubscription.tier === "bureau" ||
-      mockSubscription.tier === "direct"
-    ) {
-      mockSubscription.hasAccess = true;
-      mockSubscription.status = "active";
-      mockSubscription.features.messaging = true;
-      mockSubscription.features.videoCall = true;
-      mockSubscription.features.unlimitedSwipes = true;
-      mockSubscription.features.advancedFilters = true;
-      if (mockSubscription.tier === "direct") {
-        mockSubscription.features.profileBoosts = true;
-      }
-    }
-
-    setSubscription(mockSubscription);
+    setSubscription(freeSubscription);
   }, []);
 
   return subscription;

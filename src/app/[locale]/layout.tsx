@@ -1,3 +1,4 @@
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Noto_Nastaliq_Urdu, Poppins } from "next/font/google";
@@ -41,7 +42,7 @@ export default async function LocaleLayout({
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <ErrorBoundary>{children}</ErrorBoundary>
         </NextIntlClientProvider>
       </body>
     </html>

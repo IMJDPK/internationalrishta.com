@@ -2,7 +2,6 @@
 
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
-import PricingComparison from "@/components/PricingComparison";
 import PricingFAQ from "@/components/PricingFAQ";
 import { motion } from "framer-motion";
 
@@ -33,41 +32,50 @@ export default function PricingPage() {
                 />
               </svg>
               <span className="text-sm font-medium text-gray-700">
-                No Hidden Fees • Lifetime Access
+                100% Free for Users • No Hidden Fees
               </span>
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
-              Simple,
               <span className="bg-gradient-to-r from-teal-500 to-gold-500 bg-clip-text text-transparent">
-                {" "}
-                Transparent{" "}
+                Completely Free{" "}
               </span>
-              Pricing
+              for Users
             </h1>
 
             <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-3xl mx-auto">
-              Choose the plan that works best for you. All plans include full
-              access with no recurring fees.
+              Create your profile, discover matches, message, and video call—all
+              completely free. No subscriptions, no hidden charges.
             </p>
 
-            {/* Quick Comparison */}
+            {/* Quick Features */}
             <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">
               <div className="bg-white/60 backdrop-blur-sm rounded-card p-4 border border-gray-200">
-                <div className="text-3xl font-bold text-gold-600 mb-1">
-                  PKR 3,999
+                <div className="text-3xl mb-2">✅</div>
+                <div className="font-bold text-gray-900 mb-1">
+                  Free Profiles
                 </div>
-                <div className="text-sm text-gray-600">Bureau Referral</div>
+                <div className="text-sm text-gray-600">
+                  Create & browse unlimited
+                </div>
               </div>
               <div className="bg-white/60 backdrop-blur-sm rounded-card p-4 border border-gray-200">
-                <div className="text-3xl font-bold text-teal-600 mb-1">
-                  PKR 4,999
+                <div className="text-3xl mb-2">💬</div>
+                <div className="font-bold text-gray-900 mb-1">
+                  Free Messaging
                 </div>
-                <div className="text-sm text-gray-600">Direct Signup</div>
+                <div className="text-sm text-gray-600">
+                  Chat with your matches
+                </div>
               </div>
               <div className="bg-gradient-to-br from-gold-50 to-teal-50 rounded-card p-4 border-2 border-gold-300">
-                <div className="text-3xl font-bold text-gray-900 mb-1">20%</div>
-                <div className="text-sm text-gray-600">Bureau Commission</div>
+                <div className="text-3xl mb-2">🎥</div>
+                <div className="font-bold text-gray-900 mb-1">
+                  Free Video Calls
+                </div>
+                <div className="text-sm text-gray-600">
+                  Connect face-to-face
+                </div>
               </div>
             </div>
           </motion.div>
@@ -77,7 +85,58 @@ export default function PricingPage() {
       {/* Main Content */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <PricingComparison />
+          {/* Features Section */}
+          <div className="max-w-4xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              Everything You Need, Absolutely Free
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                {
+                  icon: "🔍",
+                  title: "Unlimited Profile Discovery",
+                  desc: "Browse and swipe through unlimited verified profiles",
+                },
+                {
+                  icon: "💬",
+                  title: "Free Messaging",
+                  desc: "Chat with your matches without any restrictions",
+                },
+                {
+                  icon: "🎥",
+                  title: "Video Calls",
+                  desc: "Connect face-to-face with verified members",
+                },
+                {
+                  icon: "✨",
+                  title: "Profile Boosts",
+                  desc: "Get featured to increase your visibility",
+                },
+                {
+                  icon: "🔐",
+                  title: "Privacy Protected",
+                  desc: "Your data is safe and secure, always",
+                },
+                {
+                  icon: "🤝",
+                  title: "Bureau Connections",
+                  desc: "Connect with verified marriage bureaus",
+                },
+              ].map((feature) => (
+                <div
+                  key={feature.title}
+                  className="bg-white rounded-card p-6 shadow-lg border border-gray-200"
+                >
+                  <div className="text-4xl mb-3">{feature.icon}</div>
+                  <h3 className="font-bold text-lg text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">{feature.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <PricingFAQ />
         </div>
       </section>

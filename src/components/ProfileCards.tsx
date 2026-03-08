@@ -123,7 +123,7 @@ function ProfileCard({ profile, onSwipe, style }: ProfileCardProps) {
 
   const handleDragEnd = (
     _: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
+    info: PanInfo,
   ) => {
     if (Math.abs(info.offset.x) > 100) {
       onSwipe(info.offset.x > 0 ? "right" : "left");
@@ -291,7 +291,7 @@ export default function ProfileCards() {
             setProfiles(mockProfiles);
             setCurrentIndex(0);
           }}
-          className="px-8 py-3 bg-gold-500 hover:bg-gold-600 text-white font-bold rounded-pill transition-colors"
+          className="min-h-11 px-8 py-3 bg-gold-500 hover:bg-gold-600 text-white font-bold rounded-pill transition-colors text-base"
         >
           Review Again
         </button>
@@ -326,13 +326,15 @@ export default function ProfileCards() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => handleButtonClick("left")}
-          className="w-16 h-16 bg-white hover:bg-gray-50 border-2 border-gray-300 rounded-full flex items-center justify-center shadow-lg transition-colors group"
+          className="min-w-16 min-h-16 w-16 h-16 bg-white hover:bg-gray-50 border-2 border-gray-300 rounded-full flex items-center justify-center shadow-lg transition-colors group"
+          aria-label="Pass"
         >
           <svg
             className="w-8 h-8 text-red-500 group-hover:scale-110 transition-transform"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -347,12 +349,14 @@ export default function ProfileCards() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => handleButtonClick("right")}
-          className="w-20 h-20 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 rounded-full flex items-center justify-center shadow-xl transition-all group"
+          className="min-w-20 min-h-20 w-20 h-20 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 rounded-full flex items-center justify-center shadow-xl transition-all group"
+          aria-label="Like"
         >
           <svg
             className="w-10 h-10 text-white group-hover:scale-110 transition-transform"
             fill="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
@@ -361,13 +365,15 @@ export default function ProfileCards() {
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="w-16 h-16 bg-white hover:bg-gray-50 border-2 border-gray-300 rounded-full flex items-center justify-center shadow-lg transition-colors group"
+          className="min-w-16 min-h-16 w-16 h-16 bg-white hover:bg-gray-50 border-2 border-gray-300 rounded-full flex items-center justify-center shadow-lg transition-colors group"
+          aria-label="Super Like"
         >
           <svg
             className="w-8 h-8 text-teal-500 group-hover:scale-110 transition-transform"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -395,9 +401,14 @@ export default function ProfileCards() {
         >
           <button
             onClick={() => router.push(`/${locale}/messages`)}
-            className="px-6 py-3 bg-gradient-to-r from-gold-500 to-teal-500 hover:from-gold-600 hover:to-teal-600 text-white font-bold rounded-pill shadow-lg transition-all flex items-center gap-2 mx-auto"
+            className="min-h-11 px-6 py-3 bg-gradient-to-r from-gold-500 to-teal-500 hover:from-gold-600 hover:to-teal-600 text-white font-bold rounded-pill shadow-lg transition-all flex items-center gap-2 mx-auto text-base"
           >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <svg
+              className="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
               <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
             </svg>

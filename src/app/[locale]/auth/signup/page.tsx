@@ -24,8 +24,6 @@ export default function SignupPage() {
     email: "",
     phone: "",
     password: "",
-    plan: "trial",
-    referralCode: "",
     acceptTerms: false,
     acceptLocation: false,
   });
@@ -105,18 +103,6 @@ export default function SignupPage() {
     setStep(2);
   };
 
-  const handlePlanContinue = () => {
-    if (
-      formData.plan === "referral" &&
-      !referralPattern.test(formData.referralCode.trim())
-    ) {
-      setError(t("referralCodeInvalid"));
-      return;
-    }
-    setError("");
-    setStep(3);
-  };
-
   const handleEmailSignup = async () => {
     if (!formData.acceptTerms || !formData.acceptLocation) return;
     setError("");
@@ -129,8 +115,6 @@ export default function SignupPage() {
         data: {
           full_name: formData.name,
           phone: formData.phone,
-          plan: formData.plan,
-          referral_code: formData.referralCode,
         },
       },
     });
@@ -138,8 +122,8 @@ export default function SignupPage() {
     if (authError) {
       setError(authError.message);
     } else {
-      // Redirect to payment instructions instead of discover
-      router.push(`/${locale}/payment-instructions`);
+      // Redirect to profile to complete registration
+      router.push(`/${locale}/profile`);
     }
     setIsLoading(false);
   };
@@ -187,14 +171,14 @@ export default function SignupPage() {
                     {t("stepLabel", { step })}
                   </span>
                   <span className="text-sm font-semibold text-gold-600">
-                    {t("progress", { percent: Math.round((step / 3) * 100) })}
+                    {t("progress", { percent: Math.round((step / 2) * 100) })}
                   </span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded-pill overflow-hidden">
                   <motion.div
                     className="h-full bg-gradient-to-r from-gold-500 to-teal-500"
                     initial={{ width: 0 }}
-                    animate={{ width: `${(step / 3) * 100}%` }}
+                    animate={{ width: `${(step / 2) * 100}%` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                   />
                 </div>
@@ -256,7 +240,7 @@ export default function SignupPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                        className="w-full px-4 py-3 text-base min-h-[44px] border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:outline-none"
                       />
                     </div>
                     <div>
@@ -270,7 +254,7 @@ export default function SignupPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
                         }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                        className="w-full px-4 py-3 text-base min-h-[44px] border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:outline-none"
                       />
                     </div>
                     <div>
@@ -285,7 +269,7 @@ export default function SignupPage() {
                           const formatted = formatPhone(e.target.value);
                           setFormData({ ...formData, phone: formatted });
                         }}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                        className="w-full px-4 py-3 text-base min-h-[44px] border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:outline-none"
                       />
                     </div>
                     <div>
@@ -299,7 +283,7 @@ export default function SignupPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
                         }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                        className="w-full px-4 py-3 text-base min-h-[44px] border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:outline-none"
                       />
                     </div>
                     <div className="rounded-card border border-gold-100 bg-gold-50/60 p-4">
@@ -324,7 +308,7 @@ export default function SignupPage() {
                         placeholder={t("captchaPlaceholder")}
                         value={captchaInput}
                         onChange={(e) => setCaptchaInput(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent"
+                        className="w-full px-4 py-3 text-base min-h-[44px] border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent focus-visible:outline-none"
                       />
                     </div>
                     <div className="space-y-2">
@@ -375,205 +359,8 @@ export default function SignupPage() {
                 </motion.div>
               )}
 
-              {/* Step 2: Plan Selection */}
+              {/* Step 2: Terms & Consent */}
               {step === 2 && (
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="space-y-6"
-                >
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                    {t("choosePlan")}
-                  </h2>
-
-                  <div className="space-y-4">
-                    {/* Trial Option */}
-                    <label
-                      className={`block p-6 border-2 rounded-card cursor-pointer transition-all ${
-                        formData.plan === "trial"
-                          ? "border-purple-500 bg-purple-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="plan"
-                        value="trial"
-                        checked={formData.plan === "trial"}
-                        onChange={(e) =>
-                          setFormData({ ...formData, plan: e.target.value })
-                        }
-                        className="sr-only"
-                      />
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-xl font-bold text-gray-900">
-                              {t("trialTitle")}
-                            </h3>
-                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-pill">
-                              RECOMMENDED
-                            </span>
-                          </div>
-                          <p className="text-gray-600 mb-2">{t("trialDesc")}</p>
-                          <p className="text-sm text-gray-500 mb-3">
-                            {t("trialNote")}
-                          </p>
-                          <p className="text-3xl font-bold text-purple-600">
-                            {t("trialPrice")}
-                          </p>
-                        </div>
-                        {formData.plan === "trial" && (
-                          <svg
-                            className="w-6 h-6 text-purple-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    </label>
-
-                    {/* Bureau Referral Option */}
-                    <label
-                      className={`block p-6 border-2 rounded-card cursor-pointer transition-all ${
-                        formData.plan === "referral"
-                          ? "border-gold-500 bg-gold-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="plan"
-                        value="referral"
-                        checked={formData.plan === "referral"}
-                        onChange={(e) =>
-                          setFormData({ ...formData, plan: e.target.value })
-                        }
-                        className="sr-only"
-                      />
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-gray-900 mb-1">
-                            {t("referralTitle")}
-                          </h3>
-                          <p className="text-gray-600 mb-3">
-                            {t("referralDesc")}
-                          </p>
-                          <p className="text-3xl font-bold text-gray-900">
-                            {t("referralPrice")}
-                          </p>
-                        </div>
-                        {formData.plan === "referral" && (
-                          <svg
-                            className="w-6 h-6 text-gold-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    </label>
-
-                    <label
-                      className={`block p-6 border-2 rounded-card cursor-pointer transition-all ${
-                        formData.plan === "direct"
-                          ? "border-gold-500 bg-gold-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="plan"
-                        value="direct"
-                        checked={formData.plan === "direct"}
-                        onChange={(e) =>
-                          setFormData({ ...formData, plan: e.target.value })
-                        }
-                        className="sr-only"
-                      />
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-xl font-bold text-gray-900">
-                              {t("directTitle")}
-                            </h3>
-                            <span className="bg-gold-500 text-white px-2 py-1 rounded text-xs font-bold">
-                              POPULAR
-                            </span>
-                          </div>
-                          <p className="text-gray-600 mb-3">
-                            {t("directDesc")}
-                          </p>
-                          <p className="text-3xl font-bold text-gray-900">
-                            {t("directPrice")}
-                          </p>
-                        </div>
-                        {formData.plan === "direct" && (
-                          <svg
-                            className="w-6 h-6 text-gold-500"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        )}
-                      </div>
-                    </label>
-                  </div>
-
-                  {formData.plan === "referral" && (
-                    <input
-                      type="text"
-                      placeholder={t("referralCodePlaceholder")}
-                      value={formData.referralCode}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          referralCode: e.target.value.toUpperCase(),
-                        })
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent font-mono"
-                    />
-                  )}
-
-                  {error && step === 2 && formData.plan === "referral" && (
-                    <p className="text-sm text-red-600">{error}</p>
-                  )}
-
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => setStep(1)}
-                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-4 rounded-card transition-colors"
-                    >
-                      {t("back")}
-                    </button>
-                    <button
-                      onClick={handlePlanContinue}
-                      className="flex-1 bg-gold-500 hover:bg-gold-600 text-white font-bold py-4 rounded-card transition-colors"
-                    >
-                      {t("continueToTerms")}
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Step 3: Terms & Consent */}
-              {step === 3 && (
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -636,18 +423,18 @@ export default function SignupPage() {
                     <h4 className="font-semibold text-blue-900 mb-2">
                       {t("nextStepsTitle")}
                     </h4>
-                    <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
-                      {t
-                        .raw("nextSteps")
-                        .map((stepText: string, idx: number) => (
-                          <li key={idx}>{stepText}</li>
-                        ))}
-                    </ol>
+                    <div className="text-sm text-blue-800 space-y-1">
+                      <p>
+                        ✅ Complete your profile with photos and preferences
+                      </p>
+                      <p>✅ Start discovering compatible matches</p>
+                      <p>✅ Connect and communicate with verified members</p>
+                    </div>
                   </div>
 
                   <div className="flex gap-4">
                     <button
-                      onClick={() => setStep(2)}
+                      onClick={() => setStep(1)}
                       className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-4 rounded-card transition-colors"
                     >
                       {t("back")}

@@ -1,8 +1,8 @@
 # International Rishta - Launch Guide
 
 **Domain:** internationalrishta.com  
-**Payment:** RAAST via JazzCash (03002027977) - Jawad Khalid Khan  
-**Date:** January 3, 2026
+**Platform Model:** 100% FREE for users, B2B revenue from marriage bureaus  
+**Last Updated:** March 8, 2026
 
 ---
 
@@ -41,24 +41,19 @@ git push origin main
 Create `.env.local` in project root (git-ignored):
 
 ```env
-# Supabase
+# Supabase (Required)
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-# Daily.co (Video Calls)
+# Daily.co (Video Calls - Optional, for future implementation)
 NEXT_PUBLIC_DAILY_API_KEY=0e11919686e89e5720f0b76083c804634ebe069749b2dc58128482f3500b1d7b
 NEXT_PUBLIC_DAILY_DOMAIN=internationalrishta.daily.co
 
-# RAAST Payment Gateway
-NEXT_PUBLIC_RAAST_MERCHANT_ID=your_merchant_id
-NEXT_PUBLIC_RAAST_API_KEY=your_api_key
-RAAST_WEBHOOK_SECRET=your_webhook_secret
-
-# Email (Resend.com or SendGrid)
+# Email (Recommended for notifications)
 RESEND_API_KEY=your_resend_key
 
-# App Config
+# App Config (Required)
 NEXT_PUBLIC_APP_URL=https://internationalrishta.com
 NODE_ENV=development
 ```
@@ -90,7 +85,7 @@ NODE_ENV=development
    - Dashboard → Authentication → Providers
 
 - Enable: Google OAuth
-   - Add redirect URL: `https://internationalrishta.com/en/auth/callback`
+  - Add redirect URL: `https://internationalrishta.com/en/auth/callback`
 
 **✅ Action:** Test local auth flow with `npm run dev` on signup page.
 
@@ -108,58 +103,63 @@ NODE_ENV=development
 
 **✅ Action:** Test video call UI on Messages page (currently mock, will wire to Daily SDK next).
 
+**Note:** Video calls are a future feature. Platform currently supports messaging only.
+
 ---
 
-## 🏦 Phase 2: Payment Integration (RAAST/JazzCash)
+## 💰 Phase 2: Revenue Model (B2B - Marriage Bureaus Only)
 
-### Step 2.1: Register with RAAST
+### Step 2.1: Platform is FREE for End Users
 
-1. **Contact:** RAAST (Pakistani payment gateway)
-   - Website: https://raast.npl.org.pk/ (or check with JazzCash partner)
-   - Account setup: Provide business details + Jawad Khalid Khan info
-   - Get: Merchant ID, API Key, Webhook secret
+**Important:** The platform is 100% free for all users. There are NO subscription fees, NO payment barriers, and NO premium tiers.
 
-2. **Store in `.env.local`:**
-   ```env
-   NEXT_PUBLIC_RAAST_MERCHANT_ID=your_merchant_id
-   NEXT_PUBLIC_RAAST_API_KEY=your_api_key
-   RAAST_WEBHOOK_SECRET=your_webhook_secret
-   ```
+**Users get:**
 
-### Step 2.2: Implement Payment Processing
+- ✅ Free profile creation
+- ✅ Unlimited profile discovery (swipes)
+- ✅ Free messaging with matches
+- ✅ Free video calls (when implemented)
+- ✅ Free profile boosts
+- ✅ Free advanced filters
+- ✅ Free access to all features
 
-**Create payment helper** (`src/lib/raast.ts`):
+**Revenue comes from Marriage Bureaus (B2B):**
 
-```typescript
-export async function initiateRaastPayment({
-  amount: number,
-  description: string,
-  userId: string,
-  paymentType: 'subscription' | 'bureau_registration' | 'verification'
-}) {
-  // Call RAAST API to create payment request
-  // Return: payment link / QR code for user
-}
+- PKR 20,000 application fee (non-refundable)
+- PKR 200,000 registration fee (upon approval)
+- 20% commission on referred user activity
+- 80% of in-person verification fees
 
-export async function verifyRaastWebhook(signature: string, body: any) {
-  // Verify webhook signature using RAAST_WEBHOOK_SECRET
-  // Update user subscription / bureau status in Supabase
-}
-```
+### Step 2.2: Bureau Payment Processing
 
-**Update signup flow:**
+**Manual Processing (Current):**
+Bureau applications require bank transfer to:
 
-- After plan selection → redirect to RAAST payment
-- On success → auto-create subscription in Supabase
-- Email confirmation sent
+- **Account:** IMJD YOUR DIGITAL MEDIA PARTNER
+- **Account #:** 50347000837855
+- **Bank:** Habib Bank Limited (HBL)
 
-**Update bureau registration:**
+Bureaus upload payment proof during registration. Admin manually verifies and approves.
 
-- Step 3 → RAAST QR/link for PKR 20,000 + PKR 200,000
-- Webhook updates `bureaus` table status to "pending_review"
-- Admin can see pending applications
+**Future:** Integrate RAAST/JazzCash API for automated payment verification.
 
-**✅ Action:** Set up RAAST merchant account and get credentials.
+**User Signup Flow (Free - No Payment):**
+
+1. User clicks "Sign Up"
+2. Completes profile information (name, email, password, bio, city)
+3. Accepts terms and conditions
+4. Account created → redirected to profile page
+5. Welcome email sent (no trial, permanent free access)
+
+**Bureau Registration Flow:**
+
+1. Bureau submits application with business details
+2. Makes bank transfer (PKR 20K + 200K)
+3. Uploads payment proof
+4. Admin reviews application and payment
+5. Upon approval, bureau gets verified badge and referral code
+
+**✅ Action:** Admin panel for reviewing bureau applications is available at [/admin/dashboard](src/app/admin/dashboard/page.tsx).
 
 ---
 
@@ -193,7 +193,7 @@ export async function sendWelcomeEmail(email: string, name: string) {
     from: "noreply@internationalrishta.com",
     to: email,
     subject: "Welcome to International Rishta",
-    html: `<h1>Welcome ${name}!</h1><p>Your 2-day trial starts now.</p>`,
+    html: `<h1>Welcome ${name}!</h1><p>Your free account is ready. Start discovering matches today!</p>`,
   });
 }
 

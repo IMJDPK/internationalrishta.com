@@ -100,16 +100,20 @@ export default function Navigation() {
           {/* Mobile Toggle */}
           <button
             type="button"
-            className={`md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg border transition-colors ${
+            className={`md:hidden inline-flex items-center justify-center min-h-11 min-w-11 rounded-lg border transition-colors ${
               isHomePage && !scrolled
                 ? "border-white/20 text-white hover:bg-white/10"
                 : "border-gray-200 text-gray-700 hover:bg-gray-100"
             }`}
             onClick={() => setShowMobileMenu((prev) => !prev)}
             aria-expanded={showMobileMenu}
-            aria-label="Toggle menu"
+            aria-label={
+              showMobileMenu
+                ? t("navigation.closeMenu")
+                : t("navigation.openMenu")
+            }
           >
-            <span className="text-lg">☰</span>
+            <span className="text-lg">{showMobileMenu ? "✕" : "☰"}</span>
           </button>
 
           {/* Desktop/Tablet Nav */}
@@ -313,99 +317,189 @@ export default function Navigation() {
 
         {/* Mobile Menu */}
         {showMobileMenu && (
-          <div className="md:hidden mt-4 rounded-card border border-gray-200 bg-white/95 backdrop-blur-md shadow-lg p-4 space-y-3">
-            <Link
-              href={`/${locale}`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               onClick={() => setShowMobileMenu(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+              aria-hidden="true"
+            />
+
+            {/* Menu Panel */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 start-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-2xl z-50 md:hidden overflow-y-auto"
             >
-              {t("navigation.home")}
-            </Link>
-            <Link
-              href={`/${locale}/discover`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              {t("navigation.discover")}
-            </Link>
-            <Link
-              href={`/${locale}/messages`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              {t("navigation.messages")}
-            </Link>
-            <Link
-              href={`/${locale}/pricing`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              {t("navigation.pricing")}
-            </Link>
-            <Link
-              href={`/${locale}/return-refund`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              {t("navigation.returnRefund")}
-            </Link>
-            <Link
-              href={`/${locale}/shipping-service`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              {t("navigation.shippingService")}
-            </Link>
-            <Link
-              href={`/${locale}/bureau`}
-              className="block text-sm font-medium text-gray-700 hover:text-gold-600"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              {t("navigation.bureau")}
-            </Link>
-            <div className="flex items-center gap-3">
-              <Link
-                href={`/${otherLocale}`}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                {otherLocale.toUpperCase()}
-              </Link>
-              <span className="text-xs font-semibold text-gray-600">
-                {t("subscription.counter", {
-                  count: activeMembers.toLocaleString(),
-                })}
-              </span>
-            </div>
-            {user ? (
-              <button
-                onClick={async () => {
-                  await handleSignOut();
-                  setShowMobileMenu(false);
-                }}
-                className="w-full text-start text-sm font-medium text-red-600 hover:text-red-700"
-              >
-                Sign Out
-              </button>
-            ) : (
-              <div className="flex items-center gap-3">
-                <Link
-                  href={`/${locale}/auth/signin`}
-                  className="text-sm font-medium text-gray-700 hover:text-gold-600"
-                  onClick={() => setShowMobileMenu(false)}
-                >
-                  {t("navigation.signIn")}
-                </Link>
-                <Link
-                  href={`/${locale}/auth/signup`}
-                  className="px-4 py-2 bg-gold-500 hover:bg-gold-600 text-white rounded-pill font-semibold text-sm shadow-lg transition-all hover:shadow-xl"
-                  onClick={() => setShowMobileMenu(false)}
-                >
-                  {t("navigation.signUp")}
-                </Link>
+              <div className="p-6 space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+                  <Image
+                    src="/assets/logo-golden.png"
+                    alt={t("siteName")}
+                    width={150}
+                    height={50}
+                    className="h-10 w-auto"
+                  />
+                  <button
+                    onClick={() => setShowMobileMenu(false)}
+                    className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
+                    aria-label={t("navigation.closeMenu")}
+                  >
+                    <span className="text-xl">✕</span>
+                  </button>
+                </div>
+
+                {/* User Section */}
+                {user && (
+                  <div className="pb-4 border-b border-gray-200">
+                    <Link
+                      href={`/${locale}/profile`}
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <div className="min-h-11 min-w-11 rounded-full bg-gold-100 flex items-center justify-center text-gold-700 font-semibold text-lg">
+                        {user.email?.[0]?.toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-gray-900 text-base">
+                          {user.user_metadata?.full_name ||
+                            user.email?.split("@")[0]}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {t("navigation.viewProfile")}
+                        </div>
+                      </div>
+                    </Link>
+                    {isAdmin && (
+                      <Link
+                        href="/admin/dashboard"
+                        className="mt-2 flex items-center gap-2 px-4 py-3 bg-gold-50 rounded-lg text-gold-700 font-semibold hover:bg-gold-100 transition-colors text-base min-h-11"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        <span>⚡</span>
+                        <span>{t("navigation.adminDashboard")}</span>
+                      </Link>
+                    )}
+                  </div>
+                )}
+
+                {/* Navigation Links */}
+                <nav className="space-y-1" role="navigation">
+                  <Link
+                    href={`/${locale}`}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    {t("navigation.home")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/discover`}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    {t("navigation.discover")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/messages`}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    {t("navigation.messages")}
+                  </Link>
+                  <Link
+                    href={`/${locale}/pricing`}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    {t("navigation.pricing")}
+                  </Link>
+
+                  {/* Policies Submenu */}
+                  <div className="space-y-1 ps-4 border-s-2 border-gray-200 ms-4">
+                    <Link
+                      href={`/${locale}/return-refund`}
+                      className="block px-4 py-3 text-base text-gray-600 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {t("navigation.returnRefund")}
+                    </Link>
+                    <Link
+                      href={`/${locale}/shipping-service`}
+                      className="block px-4 py-3 text-base text-gray-600 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {t("navigation.shippingService")}
+                    </Link>
+                  </div>
+
+                  <Link
+                    href={`/${locale}/bureau`}
+                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    {t("navigation.bureau")}
+                  </Link>
+                </nav>
+
+                {/* Subscription Counter */}
+                <div className="px-4 py-3 rounded-lg bg-gold-50 border border-gold-200">
+                  <span className="text-base font-semibold text-gold-700">
+                    {t("subscription.counter", {
+                      count: activeMembers.toLocaleString(),
+                    })}
+                  </span>
+                </div>
+
+                {/* Bottom Actions */}
+                <div className="pt-4 border-t border-gray-200 space-y-3">
+                  {/* Locale Switcher */}
+                  <Link
+                    href={`/${otherLocale}`}
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors min-h-11"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <span>🌐</span>
+                    <span>{otherLocale === "en" ? "English" : "اردو"}</span>
+                  </Link>
+
+                  {user ? (
+                    <button
+                      onClick={async () => {
+                        await handleSignOut();
+                        setShowMobileMenu(false);
+                      }}
+                      className="w-full px-4 py-3 text-base font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors min-h-11"
+                    >
+                      {t("navigation.signOut")}
+                    </button>
+                  ) : (
+                    <div className="space-y-2">
+                      <Link
+                        href={`/${locale}/auth/signin`}
+                        className="flex items-center justify-center px-4 py-3 text-base font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors min-h-11"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        {t("navigation.signIn")}
+                      </Link>
+                      <Link
+                        href={`/${locale}/auth/signup`}
+                        className="flex items-center justify-center px-4 py-3 bg-gold-500 hover:bg-gold-600 text-white rounded-lg font-semibold text-base shadow-lg transition-all hover:shadow-xl min-h-11"
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        {t("navigation.signUp")}
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
+            </motion.div>
+          </>
         )}
       </div>
     </motion.nav>

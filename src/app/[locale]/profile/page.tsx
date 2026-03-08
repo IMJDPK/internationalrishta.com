@@ -2,6 +2,7 @@
 
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import { ToastContainer, useToast } from "@/components/Toast";
 import { createClient } from "@/lib/supabase/client";
 import {
   deletePhoto,
@@ -25,6 +26,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toasts, showToast, removeToast } = useToast();
   const [formData, setFormData] = useState({
     full_name: "",
     phone: "",
@@ -134,31 +136,31 @@ export default function ProfilePage() {
 
     if (error) {
       console.error("Error saving profile:", error);
-      alert(`Failed to save profile: ${error.message}`);
+      showToast("error", `Failed to save profile: ${error.message}`);
     } else {
       setProfile(profileUpdate);
       setIsEditing(false);
-      alert("Profile saved successfully!");
+      showToast("success", "Profile saved successfully!");
     }
 
     setIsLoading(false);
   };
 
   const handlePhotoUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file || !user) return;
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      alert("Please upload an image file");
+      showToast("error", "Please upload an image file (JPEG, PNG, or WebP)");
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert("Image must be less than 5MB");
+      showToast("warning", "Image must be less than 5MB");
       return;
     }
 
@@ -168,8 +170,9 @@ export default function ProfilePage() {
     const { url, error } = await uploadProfilePhoto(user.id, file, isPrimary);
 
     if (error) {
-      alert(`Failed to upload photo: ${error.message}`);
+      showToast("error", `Failed to upload photo: ${error.message}`);
     } else {
+      showToast("success", "Photo uploaded successfully!");
       // Reload photos
       const { photos: userPhotos } = await getUserPhotos(user.id);
       setPhotos(userPhotos);
@@ -183,13 +186,13 @@ export default function ProfilePage() {
 
   const handleDeletePhoto = async (photoUrl: string) => {
     if (!user) return;
-    if (!confirm("Are you sure you want to delete this photo?")) return;
 
     const { error } = await deletePhoto(user.id, photoUrl);
 
     if (error) {
-      alert(`Failed to delete photo: ${error.message}`);
+      showToast("error", `Failed to delete photo: ${error.message}`);
     } else {
+      showToast("success", "Photo deleted.");
       const { photos: userPhotos } = await getUserPhotos(user.id);
       setPhotos(userPhotos);
     }
@@ -201,8 +204,9 @@ export default function ProfilePage() {
     const { error } = await setPrimaryPhoto(user.id, photoUrl);
 
     if (error) {
-      alert(`Failed to set primary photo: ${error.message}`);
+      showToast("error", `Failed to set primary photo: ${error.message}`);
     } else {
+      showToast("success", "Primary photo updated!");
       const { photos: userPhotos } = await getUserPhotos(user.id);
       setPhotos(userPhotos);
     }
@@ -242,8 +246,8 @@ export default function ProfilePage() {
                   {formData.full_name || user?.email}
                 </h1>
                 <p className="text-gray-600">{user?.email}</p>
-                <div className="mt-2 inline-block bg-gold-100 text-gold-800 px-3 py-1 rounded-pill text-sm font-medium">
-                  Direct Member
+                <div className="mt-2 inline-block bg-teal-100 text-teal-800 px-3 py-1 rounded-pill text-sm font-medium">
+                  ✓ Free Member
                 </div>
               </div>
               <button
@@ -403,7 +407,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setFormData({ ...formData, full_name: e.target.value })
                   }
-                  className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                     isEditing
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
@@ -424,7 +428,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setFormData({ ...formData, date_of_birth: e.target.value })
                   }
-                  className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                     isEditing
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
@@ -443,7 +447,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setFormData({ ...formData, gender: e.target.value })
                   }
-                  className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                     isEditing
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
@@ -466,7 +470,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setFormData({ ...formData, city: e.target.value })
                   }
-                  className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                     isEditing
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
@@ -496,7 +500,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                     isEditing
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
@@ -518,7 +522,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, education: e.target.value })
                     }
-                    className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                       isEditing
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
@@ -537,7 +541,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, profession: e.target.value })
                     }
-                    className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                       isEditing
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
@@ -560,7 +564,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, height: e.target.value })
                     }
-                    className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                       isEditing
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
@@ -578,7 +582,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, sect: e.target.value })
                     }
-                    className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                       isEditing
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
@@ -605,7 +609,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, biradari: e.target.value })
                     }
-                    className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                       isEditing
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
@@ -626,7 +630,7 @@ export default function ProfilePage() {
                         marital_status: e.target.value,
                       })
                     }
-                    className={`w-full px-4 py-3 border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
+                    className={`w-full px-4 py-3 text-base border rounded-card focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all ${
                       isEditing
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
@@ -691,6 +695,7 @@ export default function ProfilePage() {
         </div>
       </div>
       <Footer />
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </main>
   );
 }

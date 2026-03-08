@@ -7,17 +7,14 @@
 ## ✅ Step 1: Run SQL Migration in Supabase
 
 1. **Open Supabase Dashboard**
-
    - Go to: https://supabase.com/dashboard
    - Select project: `internationalrishta`
 
 2. **Open SQL Editor**
-
    - Left sidebar → Click "SQL Editor"
    - Click "New query"
 
 3. **Copy & Paste Migration**
-
    - Open file: `supabase/COMPLETE_PAYMENT_ADMIN_MIGRATION.sql`
    - Copy ALL the contents
    - Paste into Supabase SQL Editor
@@ -43,7 +40,6 @@
 ### Option A: Using Your Existing Account
 
 1. **Get Your User ID**
-
    - In Supabase Dashboard → Authentication → Users
    - Find your email (the one you logged in with via Google)
    - Copy your User ID (looks like: `a1b2c3d4-e5f6-7890-abcd-ef1234567890`)
@@ -65,13 +61,11 @@ VALUES (
 ### Option B: Create New Admin Account
 
 1. **Sign up on your platform**
-
    - Visit: http://localhost:3001
    - Click "Sign In" → "Sign in with Google"
    - Use email you want for admin access
 
 2. **Get the new User ID**
-
    - Follow Option A, Step 1 above
 
 3. **Add as admin**
@@ -82,7 +76,6 @@ VALUES (
 ## ✅ Step 3: Access Admin Dashboard
 
 1. **Visit Admin Dashboard**
-
    - URL: `http://localhost:3001/admin/dashboard`
    - Or: `https://yourdomain.com/admin/dashboard`
 
@@ -95,13 +88,11 @@ VALUES (
 ## ✅ Step 4: Test Payment Flow (Users)
 
 1. **Create Test User**
-
    - Open incognito/private browser window
    - Visit: `http://localhost:3001`
    - Click "Get Started" → Sign up with Google (different email)
 
 2. **Check Payment Instructions**
-
    - After signup, you'll be redirected to `/payment-instructions`
    - Verify it shows:
      - ✅ Payment amount (PKR 3,999 or 4,999)
@@ -111,12 +102,10 @@ VALUES (
      - ✅ 3-step process
 
 3. **Simulate Payment**
-
    - Note: You don't need to actually pay in testing
    - Just send yourself a test email to info@internationalrishta.com
 
 4. **Approve in Admin Dashboard**
-
    - Go back to admin dashboard
    - Click "Pending Users" tab
    - You should see your test user
@@ -133,14 +122,12 @@ VALUES (
 ## ✅ Step 5: Test Bureau Flow (Optional)
 
 1. **Create Bureau Application**
-
    - Visit: `/bureau`
    - Click "Register Your Bureau"
    - Fill out form with test data
    - Submit application
 
 2. **Check Admin Dashboard**
-
    - Go to admin dashboard
    - Click "Pending Bureaus" tab
    - Verify your test bureau appears
@@ -206,17 +193,14 @@ After completing all steps, verify:
 ### Before Going Live:
 
 1. **Update payment-instructions page**
-
    - Change localhost URLs to your domain
    - Verify phone/email are correct (03002027977, info@internationalrishta.com)
 
 2. **Set up email forwarding**
-
    - Configure info@internationalrishta.com to forward to your Gmail
    - Configure bureau@internationalrishta.com similarly
 
 3. **Test with real payment**
-
    - Have a friend sign up
    - Ask them to pay PKR 100 as test
    - Verify you receive JazzCash notification

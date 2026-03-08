@@ -2,6 +2,7 @@
 
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import { ToastContainer, useToast } from "@/components/Toast";
 import { createClient } from "@/lib/supabase/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
   const [pendingUsers, setPendingUsers] = useState<any[]>([]);
   const [pendingBureaus, setPendingBureaus] = useState<any[]>([]);
+  const { toasts, showToast, removeToast } = useToast();
   const [stats, setStats] = useState({
     totalUsers: 0,
     activeUsers: 0,
@@ -45,7 +47,10 @@ export default function AdminDashboard() {
       .single();
 
     if (!adminData) {
-      alert("Access Denied: You are not authorized to view this page");
+      showToast(
+        "error",
+        "Access Denied: You are not authorized to view this page",
+      );
       router.push("/en");
       return;
     }
@@ -112,17 +117,14 @@ export default function AdminDashboard() {
       .eq("id", userId);
 
     if (error) {
-      alert("Error approving user: " + error.message);
+      showToast("error", "Error approving user: " + error.message);
     } else {
-      alert("User activated successfully!");
+      showToast("success", "User activated successfully!");
       loadDashboardData();
     }
   };
 
   const rejectUser = async (userId: string) => {
-    if (!confirm("Are you sure you want to reject this user's payment?"))
-      return;
-
     const supabase = createClient();
     const { error } = await supabase
       .from("profiles")
@@ -132,9 +134,9 @@ export default function AdminDashboard() {
       .eq("id", userId);
 
     if (error) {
-      alert("Error rejecting user: " + error.message);
+      showToast("error", "Error rejecting user: " + error.message);
     } else {
-      alert("User payment rejected");
+      showToast("info", "User payment rejected");
       loadDashboardData();
     }
   };
@@ -153,16 +155,14 @@ export default function AdminDashboard() {
       .eq("id", bureauId);
 
     if (error) {
-      alert("Error approving bureau: " + error.message);
+      showToast("error", "Error approving bureau: " + error.message);
     } else {
-      alert("Bureau approved successfully!");
+      showToast("success", "Bureau approved successfully!");
       loadDashboardData();
     }
   };
 
   const rejectBureau = async (bureauId: string) => {
-    if (!confirm("Are you sure you want to reject this bureau?")) return;
-
     const supabase = createClient();
     const { error } = await supabase
       .from("marriage_bureaus")
@@ -172,9 +172,9 @@ export default function AdminDashboard() {
       .eq("id", bureauId);
 
     if (error) {
-      alert("Error rejecting bureau: " + error.message);
+      showToast("error", "Error rejecting bureau: " + error.message);
     } else {
-      alert("Bureau rejected");
+      showToast("info", "Bureau rejected");
       loadDashboardData();
     }
   };
@@ -446,6 +446,7 @@ export default function AdminDashboard() {
         </div>
       </div>
       <Footer />
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </main>
   );
 }

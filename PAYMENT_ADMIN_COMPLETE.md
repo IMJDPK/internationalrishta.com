@@ -177,20 +177,17 @@
 ## Security Features
 
 1. **Admin-Only Access**:
-
    - Dashboard checks `admin_users` table
    - Non-admins get "Access Denied" message
    - Redirected to homepage
 
 2. **Row Level Security (RLS)**:
-
    - All tables have RLS policies
    - Users can only see/edit their own data
    - Admins can see/edit all data
    - Public can only view approved content
 
 3. **Manual Verification**:
-
    - No automatic payments (prevents fraud)
    - Admin verifies each payment manually
    - Cross-checks with bank records
@@ -209,31 +206,26 @@
 ### 🚀 To Go Live:
 
 1. **Run SQL Migration** (5 min)
-
    - Follow `SETUP_PAYMENT_ADMIN.md` Step 1
    - Execute `COMPLETE_PAYMENT_ADMIN_MIGRATION.sql` in Supabase
 
 2. **Make Yourself Admin** (2 min)
-
    - Follow `SETUP_PAYMENT_ADMIN.md` Step 2
    - Add your User ID to `admin_users` table
 
 3. **Test Locally** (10 min)
-
    - Create test user account
    - Verify payment instructions page
    - Approve test user in dashboard
    - Verify user gets access
 
 4. **Deploy to Production** (30 min)
-
    - Push code to internationalrishta.com
    - Run SQL migration on production Supabase
    - Add yourself as admin on production
    - Test with real account
 
 5. **Set Up Email Forwarding** (15 min)
-
    - Configure info@internationalrishta.com → your Gmail
    - Configure bureau@internationalrishta.com → your Gmail
    - Test by sending test emails
@@ -305,24 +297,20 @@
 ## Future Enhancements (Phase 2)
 
 1. **Email Notifications**:
-
    - Auto-email when user approved
    - Auto-email when bureau approved
    - Payment received confirmations
 
 2. **SMS Integration**:
-
    - SMS when payment verified
    - SMS for bureau status updates
 
 3. **Payment API**:
-
    - JazzCash API integration
    - Auto-verify payments
    - Reduce manual work by 90%
 
 4. **Advanced Dashboard**:
-
    - Revenue analytics
    - Payment trends
    - User growth charts

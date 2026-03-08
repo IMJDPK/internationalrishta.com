@@ -13,7 +13,12 @@
       "bureau": "Marriage Bureaus",
       "howItWorks": "How It Works",
       "signIn": "Sign In",
-      "signUp": "Create Profile"
+      "signUp": "Create Profile",
+      "signOut": "Sign Out",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "viewProfile": "View Profile",
+      "adminDashboard": "Admin Dashboard"
     },
     "validation": {
       "cnic": "Enter CNIC like 12345-1234567-1",
