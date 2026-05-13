@@ -1,27 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 
 export default function PricingPreview() {
   const locale = useLocale();
+  const t = useTranslations("common.pricingPreview");
 
   const features = [
     {
       icon: "🔍",
-      title: "Unlimited Discovery",
-      description: "Browse and swipe through unlimited verified profiles",
+      title: t("featureDiscoveryTitle"),
+      description: t("featureDiscoveryDesc"),
     },
     {
       icon: "💬",
-      title: "Free Messaging",
-      description: "Chat with your matches without any restrictions",
+      title: t("featureMessagingTitle"),
+      description: t("featureMessagingDesc"),
     },
     {
       icon: "🎥",
-      title: "Video Calls",
-      description: "Connect face-to-face with verified members",
+      title: t("featureVideoTitle"),
+      description: t("featureVideoDesc"),
     },
   ];
 
@@ -36,18 +37,17 @@ export default function PricingPreview() {
         >
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-pill border border-teal-200 mb-6">
             <span className="text-sm font-medium text-gray-700">
-              ✨ No Credit Card Required
+              ✨ {t("ribbon")}
             </span>
           </div>
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             <span className="bg-gradient-to-r from-teal-500 to-gold-500 bg-clip-text text-transparent">
-              100% Free
+              {t("titleHighlight")}
             </span>{" "}
-            for Everyone
+            {t("titleSuffix")}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            All features included. No subscriptions, no hidden charges, no
-            limits.
+            {t("subtitle")}
           </p>
         </motion.div>
 
@@ -80,7 +80,7 @@ export default function PricingPreview() {
             href={`/${locale}/auth/signup`}
             className="inline-block bg-gold-500 hover:bg-gold-600 text-white font-bold px-8 py-4 rounded-card transition-all shadow-lg hover:shadow-xl"
           >
-            Get Started Free →
+            {t("cta")}
           </Link>
         </motion.div>
       </div>

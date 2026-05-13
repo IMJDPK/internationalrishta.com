@@ -62,6 +62,16 @@ export default function SignupPage() {
     return tAuth("strengthStrong");
   };
 
+  const passwordStrengthScore = passwordScore(formData.password);
+  const passwordStrengthWidthClass = [
+    "w-0",
+    "w-1/5",
+    "w-2/5",
+    "w-3/5",
+    "w-4/5",
+    "w-full",
+  ][passwordStrengthScore];
+
   const handleGoogleSignup = async () => {
     setError("");
     setIsLoading(true);
@@ -83,7 +93,7 @@ export default function SignupPage() {
       !formData.phone ||
       !formData.password
     ) {
-      setError(t("continue"));
+      setError(t("completeRequired"));
       return;
     }
     if (!isValidPhone(formData.phone)) {
@@ -314,24 +324,17 @@ export default function SignupPage() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm text-gray-600">
                         <span>{tAuth("passwordStrength")}</span>
-                        <span>
-                          {getStrengthLabel(passwordScore(formData.password))}
-                        </span>
+                        <span>{getStrengthLabel(passwordStrengthScore)}</span>
                       </div>
                       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className={`h-full transition-all duration-300 ${
-                            passwordScore(formData.password) >= 4
+                          className={`h-full transition-all duration-300 ${passwordStrengthWidthClass} ${
+                            passwordStrengthScore >= 4
                               ? "bg-green-500"
-                              : passwordScore(formData.password) === 3
+                              : passwordStrengthScore === 3
                                 ? "bg-amber-500"
                                 : "bg-red-500"
                           }`}
-                          style={{
-                            width: `${
-                              (passwordScore(formData.password) / 5) * 100
-                            }%`,
-                          }}
                         />
                       </div>
                     </div>
@@ -344,7 +347,7 @@ export default function SignupPage() {
                     disabled={isLoading}
                     className="w-full bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-4 rounded-card transition-colors"
                   >
-                    {isLoading ? "Please wait..." : t("continue")}
+                    {isLoading ? t("pleaseWait") : t("continue")}
                   </button>
 
                   <p className="text-center text-sm text-gray-600">
@@ -391,7 +394,7 @@ export default function SignupPage() {
                         >
                           {t("termsLink")}
                         </Link>{" "}
-                        and{" "}
+                        {t("and")}{" "}
                         <Link
                           href={`/${locale}/privacy`}
                           className="text-gold-600 hover:text-gold-700 underline"
@@ -424,11 +427,9 @@ export default function SignupPage() {
                       {t("nextStepsTitle")}
                     </h4>
                     <div className="text-sm text-blue-800 space-y-1">
-                      <p>
-                        ✅ Complete your profile with photos and preferences
-                      </p>
-                      <p>✅ Start discovering compatible matches</p>
-                      <p>✅ Connect and communicate with verified members</p>
+                      {t.raw("nextSteps").map((step: string) => (
+                        <p key={step}>✅ {step}</p>
+                      ))}
                     </div>
                   </div>
 
@@ -454,7 +455,7 @@ export default function SignupPage() {
                           : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
                     >
-                      {isLoading ? "Submitting..." : t("createAccount")}
+                      {isLoading ? t("submitting") : t("createAccount")}
                     </button>
                   </div>
 

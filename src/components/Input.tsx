@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { forwardRef, InputHTMLAttributes } from "react";
+import { forwardRef, InputHTMLAttributes, useId } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -18,7 +18,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
  */
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, helperText, id, ...props }, ref) => {
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = useId();
+    const inputId = id || generatedId;
     const errorId = error ? `${inputId}-error` : undefined;
     const helperId = helperText ? `${inputId}-helper` : undefined;
 
@@ -36,11 +37,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
-          aria-invalid={error ? "true" : undefined}
           aria-describedby={error ? errorId : helperText ? helperId : undefined}
           className={cn(
             // Base styles with 16px font to prevent iOS zoom
-            "w-full px-4 py-3 text-base rounded-lg border transition-all duration-200",
+            "w-full px-4 py-3 text-base rounded-card border transition-all duration-200",
             "min-h-11", // 44px minimum touch target (WCAG 2.1 AAA)
 
             // Default state

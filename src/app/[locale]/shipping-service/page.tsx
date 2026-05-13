@@ -9,7 +9,7 @@ export default function ShippingServicePage() {
   const locale = useLocale();
   const t = useTranslations("common.legal.shippingService");
   const links = useTranslations("common.legal.links");
-  const contact = useTranslations("common.legal.contact");
+  const contact = useTranslations("common.legal.office");
   const timelineItems = t.raw("timelineItems") as string[];
   const issuesItems = t.raw("issuesItems") as string[];
 

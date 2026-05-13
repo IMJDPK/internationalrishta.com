@@ -1,58 +1,77 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 
-export type SubscriptionTier = "free" | "trial" | "bureau" | "direct";
+export type SubscriptionTier = "free" | "premium";
 export type SubscriptionStatus = "active" | "expired" | "pending";
 
 export interface SubscriptionData {
   tier: SubscriptionTier;
   status: SubscriptionStatus;
-  hasAccess: boolean;
-  trialEndsAt?: Date;
+  hasPremium: boolean;
   features: {
-    messaging: boolean;
-    videoCall: boolean;
+    messaging: boolean;      // free for all connected matches
+    videoCall: boolean;      // premium only
+    voiceMessage: boolean;   // premium only
+    imageMessage: boolean;   // premium only
     unlimitedSwipes: boolean;
     profileBoosts: boolean;
     advancedFilters: boolean;
   };
 }
 
-/**
- * Hook to check user's subscription status and feature access
- * Platform is now FREE for all users - full access to all features
- */
 export function useSubscription(): SubscriptionData {
   const [subscription, setSubscription] = useState<SubscriptionData>({
     tier: "free",
     status: "active",
-    hasAccess: true,
+    hasPremium: false,
     features: {
       messaging: true,
-      videoCall: true,
+      videoCall: false,
+      voiceMessage: false,
+      imageMessage: false,
       unlimitedSwipes: true,
-      profileBoosts: true,
-      advancedFilters: true,
+      profileBoosts: false,
+      advancedFilters: false,
     },
   });
 
   useEffect(() => {
-    // Platform is FREE - all users get full access
-    const freeSubscription: SubscriptionData = {
-      tier: "free",
-      status: "active",
-      hasAccess: true,
-      features: {
-        messaging: true,
-        videoCall: true,
-        unlimitedSwipes: true,
-        profileBoosts: true,
-        advancedFilters: true,
-      },
+    const checkSubscription = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("subscription_tier")
+        .eq("id", user.id)
+        .single();
+
+      const isPremium =
+        profile?.subscription_tier === "premium" ||
+        profile?.subscription_tier === "direct" ||
+        profile?.subscription_tier === "bureau";
+
+      setSubscription({
+        tier: isPremium ? "premium" : "free",
+        status: "active",
+        hasPremium: isPremium,
+        features: {
+          messaging: true,
+          videoCall: isPremium,
+          voiceMessage: isPremium,
+          imageMessage: isPremium,
+          unlimitedSwipes: true,
+          profileBoosts: isPremium,
+          advancedFilters: isPremium,
+        },
+      });
     };
 
-    setSubscription(freeSubscription);
+    checkSubscription();
   }, []);
 
   return subscription;

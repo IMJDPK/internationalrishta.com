@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { forwardRef, TextareaHTMLAttributes } from "react";
+import { forwardRef, TextareaHTMLAttributes, useId } from "react";
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -17,8 +17,8 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  */
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, helperText, id, rows = 4, ...props }, ref) => {
-    const textareaId =
-      id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
+    const generatedId = useId();
+    const textareaId = id || generatedId;
     const errorId = error ? `${textareaId}-error` : undefined;
     const helperId = helperText ? `${textareaId}-helper` : undefined;
 
@@ -37,11 +37,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={textareaId}
           rows={rows}
-          aria-invalid={error ? "true" : undefined}
           aria-describedby={error ? errorId : helperText ? helperId : undefined}
           className={cn(
             // Base styles with 16px font to prevent iOS zoom
-            "w-full px-4 py-3 text-base rounded-lg border transition-all duration-200 resize-vertical",
+            "w-full px-4 py-3 text-base rounded-card border transition-all duration-200 resize-vertical",
 
             // Default state
             "bg-white border-gray-300 text-gray-900 placeholder:text-gray-400",

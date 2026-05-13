@@ -9,7 +9,7 @@ export default function ReturnRefundPage() {
   const locale = useLocale();
   const t = useTranslations("common.legal.returnRefund");
   const links = useTranslations("common.legal.links");
-  const contact = useTranslations("common.legal.contact");
+  const contact = useTranslations("common.legal.office");
   const eligibilityItems = t.raw("eligibilityItems") as string[];
   const processItems = t.raw("processItems") as string[];
   const exceptionsItems = t.raw("exceptionsItems") as string[];

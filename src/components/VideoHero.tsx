@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 export default function VideoHero() {
@@ -136,27 +135,25 @@ export default function VideoHero() {
             transition={{ delay: 1.1, duration: 0.6 }}
             className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <Link href={`/${locale}/auth/signup`}>
-              <motion.button
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(234, 179, 8, 0.4)",
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="min-h-11 sm:min-h-12 px-10 py-5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white rounded-card font-bold text-base sm:text-lg shadow-2xl transition-all"
-              >
-                {t("cta")}
-              </motion.button>
-            </Link>
-            <Link href={`/${locale}#how-it-works`}>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="min-h-11 sm:min-h-12 px-10 py-5 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white rounded-card font-bold text-base sm:text-lg hover:bg-white/20 transition-all shadow-xl"
-              >
-                {t("secondaryCta")}
-              </motion.button>
-            </Link>
+            <motion.a
+              href={`/${locale}/auth/signup`}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 20px 40px rgba(234, 179, 8, 0.4)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center justify-center min-h-11 sm:min-h-12 px-10 py-5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white rounded-card font-bold text-base sm:text-lg shadow-2xl transition-all"
+            >
+              {t("cta")}
+            </motion.a>
+            <motion.a
+              href={`/${locale}#how-it-works`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="inline-flex items-center justify-center min-h-11 sm:min-h-12 px-10 py-5 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white rounded-card font-bold text-base sm:text-lg hover:bg-white/20 transition-all shadow-xl"
+            >
+              {t("secondaryCta")}
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>
@@ -167,9 +164,10 @@ export default function VideoHero() {
           {videos.map((_, idx) => (
             <button
               key={idx}
+              type="button"
               onClick={() => setCurrentVideo(idx)}
               className={`min-h-11 min-w-11 flex items-center justify-center transition-all rounded-full hover:bg-white/20 ${
-                idx === currentVideo ? "" : ""
+                idx === currentVideo ? "bg-white/20" : ""
               }`}
               aria-label={`Switch to video ${idx + 1}`}
               aria-current={idx === currentVideo ? "true" : "false"}

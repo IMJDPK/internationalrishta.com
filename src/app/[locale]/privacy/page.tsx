@@ -9,7 +9,7 @@ export default function PrivacyPage() {
   const locale = useLocale();
   const t = useTranslations("common.legal.privacy");
   const links = useTranslations("common.legal.links");
-  const contact = useTranslations("common.legal.contact");
+  const contact = useTranslations("common.legal.office");
   const collectItems = t.raw("collectItems") as string[];
   const useItems = t.raw("useItems") as string[];
   const shareItems = t.raw("shareItems") as string[];

@@ -89,7 +89,6 @@ export default function SigninPage() {
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
                 {t("title")}
               </h1>
-              <p className="text-lg text-gray-600">{t("subtitle")}</p>
             </motion.div>
 
             <motion.div
@@ -242,14 +241,14 @@ export default function SigninPage() {
                   </Link>
                 </div>
 
-                {error && <p className="text-sm text-red-600">{error}</p>}
+                {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
                 <button
                   type="submit"
                   disabled={isLoading}
                   className="w-full bg-gold-500 hover:bg-gold-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-4 rounded-card transition-colors text-base min-h-11 focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2"
                 >
-                  {isLoading ? "Signing in..." : t("submit")}
+                  {isLoading ? t("signingIn") : t("submit")}
                 </button>
               </form>
 

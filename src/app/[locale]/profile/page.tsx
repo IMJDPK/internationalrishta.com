@@ -11,13 +11,14 @@ import {
   uploadProfilePhoto,
 } from "@/lib/supabase/storage";
 import { motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function ProfilePage() {
   const locale = useLocale();
+  const t = useTranslations("common.profilePage");
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
@@ -25,6 +26,7 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [activeTapPhoto, setActiveTapPhoto] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toasts, showToast, removeToast } = useToast();
   const [formData, setFormData] = useState({
@@ -136,11 +138,11 @@ export default function ProfilePage() {
 
     if (error) {
       console.error("Error saving profile:", error);
-      showToast("error", `Failed to save profile: ${error.message}`);
+      showToast("error", t("saveFailed", { message: error.message }));
     } else {
       setProfile(profileUpdate);
       setIsEditing(false);
-      showToast("success", "Profile saved successfully!");
+      showToast("success", t("profileSaved"));
     }
 
     setIsLoading(false);
@@ -154,13 +156,13 @@ export default function ProfilePage() {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      showToast("error", "Please upload an image file (JPEG, PNG, or WebP)");
+      showToast("error", t("imageTypeError"));
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      showToast("warning", "Image must be less than 5MB");
+      showToast("warning", t("imageSizeError"));
       return;
     }
 
@@ -170,9 +172,9 @@ export default function ProfilePage() {
     const { url, error } = await uploadProfilePhoto(user.id, file, isPrimary);
 
     if (error) {
-      showToast("error", `Failed to upload photo: ${error.message}`);
+      showToast("error", t("uploadFailed", { message: error.message }));
     } else {
-      showToast("success", "Photo uploaded successfully!");
+      showToast("success", t("photoUploaded"));
       // Reload photos
       const { photos: userPhotos } = await getUserPhotos(user.id);
       setPhotos(userPhotos);
@@ -186,13 +188,15 @@ export default function ProfilePage() {
 
   const handleDeletePhoto = async (photoUrl: string) => {
     if (!user) return;
+    if (!window.confirm(t("deletePhotoConfirm"))) return;
 
+    setActiveTapPhoto(null);
     const { error } = await deletePhoto(user.id, photoUrl);
 
     if (error) {
-      showToast("error", `Failed to delete photo: ${error.message}`);
+      showToast("error", t("deleteFailed", { message: error.message }));
     } else {
-      showToast("success", "Photo deleted.");
+      showToast("success", t("photoDeleted"));
       const { photos: userPhotos } = await getUserPhotos(user.id);
       setPhotos(userPhotos);
     }
@@ -204,18 +208,24 @@ export default function ProfilePage() {
     const { error } = await setPrimaryPhoto(user.id, photoUrl);
 
     if (error) {
-      showToast("error", `Failed to set primary photo: ${error.message}`);
+      showToast("error", t("setPrimaryFailed", { message: error.message }));
     } else {
-      showToast("success", "Primary photo updated!");
+      showToast("success", t("primaryUpdated"));
       const { photos: userPhotos } = await getUserPhotos(user.id);
       setPhotos(userPhotos);
     }
   };
 
   const calculateCompletion = () => {
-    const fields = Object.values(formData);
-    const filled = fields.filter((f) => f && f.toString().trim() !== "").length;
-    return Math.round((filled / fields.length) * 100);
+    const requiredFields: (keyof typeof formData)[] = [
+      "full_name", "date_of_birth", "gender", "city",
+      "education", "profession", "height", "sect", "biradari", "marital_status",
+    ];
+    const filled = requiredFields.filter((k) => {
+      const v = formData[k];
+      return typeof v === "string" && v.trim() !== "";
+    }).length;
+    return Math.round((filled / requiredFields.length) * 100);
   };
 
   if (isLoading) {
@@ -223,7 +233,7 @@ export default function ProfilePage() {
       <main className="bg-gradient-to-br from-purple-50 via-white to-gold-50 min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your profile...</p>
+          <p className="text-gray-600">{t("loading")}</p>
         </div>
       </main>
     );
@@ -247,21 +257,22 @@ export default function ProfilePage() {
                 </h1>
                 <p className="text-gray-600">{user?.email}</p>
                 <div className="mt-2 inline-block bg-teal-100 text-teal-800 px-3 py-1 rounded-pill text-sm font-medium">
-                  ✓ Free Member
+                  ✓ {t("memberBadge")}
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setIsEditing(!isEditing)}
-                className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-2.5 rounded-card font-semibold transition-all"
+                className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-2.5 rounded-card font-semibold transition-all min-h-11"
               >
-                {isEditing ? "Cancel" : "Edit Profile"}
+                {isEditing ? t("cancel") : t("editProfile")}
               </button>
             </div>
 
             {/* Profile Completion */}
             <div className="bg-gradient-to-br from-gold-50 to-teal-50 rounded-lg p-4 border border-gold-200">
               <p className="text-sm text-gray-700 font-medium mb-2">
-                Profile Completion
+                {t("completion")}
               </p>
               <div className="flex items-center gap-3">
                 <div className="flex-1 bg-white/50 h-3 rounded-pill overflow-hidden">
@@ -288,7 +299,7 @@ export default function ProfilePage() {
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">
-                Photo Gallery ({photos.length}/6)
+                {t("photoGallery", { count: photos.length })}
               </h2>
               {photos.length < 6 && (
                 <>
@@ -297,54 +308,62 @@ export default function ProfilePage() {
                     type="file"
                     accept="image/*"
                     onChange={handlePhotoUpload}
+                    aria-label={t("addPhoto")}
                     className="hidden"
                   />
                   <button
+                    type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploadingPhoto}
-                    className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-2.5 rounded-card font-semibold transition-all disabled:opacity-50"
+                    className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-2.5 rounded-card font-semibold transition-all disabled:opacity-50 min-h-11"
                   >
-                    {isUploadingPhoto ? "Uploading..." : "+ Add Photo"}
+                    {isUploadingPhoto ? t("uploading") : t("addPhoto")}
                   </button>
                 </>
               )}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {photos.map((photo) => (
-                <div
-                  key={photo.id}
-                  className="relative group aspect-square rounded-card overflow-hidden border-2 border-transparent hover:border-gold-500 transition-all"
-                >
-                  <Image
-                    src={photo.url}
-                    alt="Profile photo"
-                    fill
-                    className="object-cover"
-                  />
-                  {photo.is_primary && (
-                    <div className="absolute top-2 left-2 bg-gold-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                      Primary
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                    {!photo.is_primary && (
-                      <button
-                        onClick={() => handleSetPrimary(photo.url)}
-                        className="bg-white text-gray-900 px-3 py-1.5 rounded text-sm font-medium hover:bg-gray-100"
-                      >
-                        Set Primary
-                      </button>
+              {photos.map((photo) => {
+                const isActive = activeTapPhoto === photo.id;
+                return (
+                  <div
+                    key={photo.id}
+                    className="relative aspect-square rounded-card overflow-hidden border-2 border-transparent hover:border-gold-500 transition-all"
+                    onClick={() => setActiveTapPhoto(isActive ? null : photo.id)}
+                  >
+                    <Image
+                      src={photo.url}
+                      alt={t("photoAlt")}
+                      fill
+                      className="object-cover"
+                    />
+                    {photo.is_primary && (
+                      <div className="absolute top-2 left-2 bg-gold-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        {t("primary")}
+                      </div>
                     )}
-                    <button
-                      onClick={() => handleDeletePhoto(photo.url)}
-                      className="bg-red-500 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
+                    <div className={`absolute inset-0 bg-black/60 transition-opacity flex items-center justify-center gap-2 ${isActive ? "opacity-100" : "opacity-0 hover:opacity-100"}`}>
+                      {!photo.is_primary && (
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); handleSetPrimary(photo.url); }}
+                          className="bg-white text-gray-900 px-3 py-1.5 rounded text-sm font-medium hover:bg-gray-100 min-h-11"
+                        >
+                          {t("setPrimary")}
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photo.url); }}
+                        className="bg-red-500 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-red-600 min-h-11"
+                      >
+                        {t("delete")}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {photos.length === 0 && (
                 <div className="col-span-2 md:col-span-3 text-center py-12 bg-gray-50 rounded-card">
@@ -361,21 +380,19 @@ export default function ProfilePage() {
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <p className="text-gray-600 mb-4">No photos uploaded yet</p>
+                  <p className="text-gray-600 mb-4">{t("noPhotos")}</p>
                   <button
+                    type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-card font-semibold"
+                    className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-card font-semibold min-h-11"
                   >
-                    Upload Your First Photo
+                    {t("uploadFirstPhoto")}
                   </button>
                 </div>
               )}
             </div>
 
-            <p className="mt-4 text-sm text-gray-600">
-              💡 Tip: Upload at least 3 photos to increase your profile
-              visibility. Max 6 photos allowed.
-            </p>
+            <p className="mt-4 text-sm text-gray-600">{t("photoTip")}</p>
           </motion.div>
 
           {/* Profile Form */}
@@ -386,10 +403,10 @@ export default function ProfilePage() {
             className="bg-white/80 backdrop-blur-sm rounded-card shadow-xl border border-white/20 p-8"
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Profile Details
+              {t("details")}
               {isEditing && (
                 <span className="ml-3 text-sm font-normal text-gold-600">
-                  (Editing mode - changes will be saved when you click Save)
+                  ({t("editingHint")})
                 </span>
               )}
             </h2>
@@ -398,7 +415,7 @@ export default function ProfilePage() {
               {/* Full Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name *
+                  {t("fullName")} *
                 </label>
                 <input
                   type="text"
@@ -412,18 +429,19 @@ export default function ProfilePage() {
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
                   }`}
-                  placeholder="Your full name"
+                  placeholder={t("fullNamePlaceholder")}
                 />
               </div>
 
               {/* Date of Birth */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Date of Birth *
+                  {t("dob")} *
                 </label>
                 <input
                   type="date"
                   value={formData.date_of_birth}
+                  aria-label={t("dob")}
                   onFocus={() => !isEditing && setIsEditing(true)}
                   onChange={(e) =>
                     setFormData({ ...formData, date_of_birth: e.target.value })
@@ -439,10 +457,11 @@ export default function ProfilePage() {
               {/* Gender */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gender *
+                  {t("gender")} *
                 </label>
                 <select
                   value={formData.gender}
+                  aria-label={t("gender")}
                   onFocus={() => !isEditing && setIsEditing(true)}
                   onChange={(e) =>
                     setFormData({ ...formData, gender: e.target.value })
@@ -453,19 +472,20 @@ export default function ProfilePage() {
                       : "border-gray-300 bg-white"
                   }`}
                 >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="">{t("selectGender")}</option>
+                  <option value="male">{t("male")}</option>
+                  <option value="female">{t("female")}</option>
                 </select>
               </div>
 
               {/* City */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  City *
+                  {t("city")} *
                 </label>
                 <select
                   value={formData.city}
+                  aria-label={t("city")}
                   onFocus={() => !isEditing && setIsEditing(true)}
                   onChange={(e) =>
                     setFormData({ ...formData, city: e.target.value })
@@ -476,7 +496,7 @@ export default function ProfilePage() {
                       : "border-gray-300 bg-white"
                   }`}
                 >
-                  <option value="">Select city</option>
+                  <option value="">{t("selectCity")}</option>
                   <option value="Karachi">Karachi</option>
                   <option value="Lahore">Lahore</option>
                   <option value="Islamabad">Islamabad</option>
@@ -491,7 +511,7 @@ export default function ProfilePage() {
               {/* Phone Number */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
+                  {t("phone")}
                 </label>
                 <input
                   type="tel"
@@ -505,7 +525,7 @@ export default function ProfilePage() {
                       ? "border-gold-300 bg-gold-50/30"
                       : "border-gray-300 bg-white"
                   }`}
-                  placeholder="03XX-XXXXXXX"
+                  placeholder={t("phonePlaceholder")}
                 />
               </div>
 
@@ -513,7 +533,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Education
+                    {t("education")}
                   </label>
                   <input
                     type="text"
@@ -527,12 +547,12 @@ export default function ProfilePage() {
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
                     }`}
-                    placeholder="e.g., Bachelor in Engineering"
+                    placeholder={t("educationPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Profession
+                    {t("profession")}
                   </label>
                   <input
                     type="text"
@@ -546,7 +566,7 @@ export default function ProfilePage() {
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
                     }`}
-                    placeholder="e.g., Software Engineer"
+                    placeholder={t("professionPlaceholder")}
                   />
                 </div>
               </div>
@@ -555,7 +575,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Height
+                    {t("height")}
                   </label>
                   <input
                     type="text"
@@ -569,15 +589,16 @@ export default function ProfilePage() {
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
                     }`}
-                    placeholder="e.g., 5'10 or 180cm"
+                    placeholder={t("heightPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Sect
+                    {t("sect")}
                   </label>
                   <select
                     value={formData.sect}
+                    aria-label={t("sect")}
                     onFocus={() => !isEditing && setIsEditing(true)}
                     onChange={(e) =>
                       setFormData({ ...formData, sect: e.target.value })
@@ -588,7 +609,7 @@ export default function ProfilePage() {
                         : "border-gray-300 bg-white"
                     }`}
                   >
-                    <option value="">Select sect</option>
+                    <option value="">{t("selectSect")}</option>
                     <option value="Sunni">Sunni</option>
                     <option value="Shia">Shia</option>
                     <option value="Syed">Syed</option>
@@ -600,7 +621,7 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Biradari
+                    {t("biradari")}
                   </label>
                   <input
                     type="text"
@@ -614,15 +635,16 @@ export default function ProfilePage() {
                         ? "border-gold-300 bg-gold-50/30"
                         : "border-gray-300 bg-white"
                     }`}
-                    placeholder="e.g., Rajput, Jatt, etc."
+                    placeholder={t("biradariPlaceholder")}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Marital Status
+                    {t("maritalStatus")}
                   </label>
                   <select
                     value={formData.marital_status}
+                    aria-label={t("maritalStatus")}
                     onFocus={() => !isEditing && setIsEditing(true)}
                     onChange={(e) =>
                       setFormData({
@@ -636,10 +658,10 @@ export default function ProfilePage() {
                         : "border-gray-300 bg-white"
                     }`}
                   >
-                    <option value="">Select status</option>
-                    <option value="never_married">Never Married</option>
-                    <option value="divorced">Divorced</option>
-                    <option value="widowed">Widowed</option>
+                    <option value="">{t("selectStatus")}</option>
+                    <option value="never_married">{t("neverMarried")}</option>
+                    <option value="divorced">{t("divorced")}</option>
+                    <option value="widowed">{t("widowed")}</option>
                   </select>
                 </div>
               </div>
@@ -647,46 +669,50 @@ export default function ProfilePage() {
               {/* Preferences */}
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Preferences
+                  {t("preferences")}
                 </h3>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    id="willing_to_relocate"
-                    checked={formData.willing_to_relocate}
-                    onFocus={() => !isEditing && setIsEditing(true)}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        willing_to_relocate: e.target.checked,
-                      })
-                    }
-                    className="w-5 h-5 text-gold-500 rounded focus:ring-gold-500"
-                  />
-                  <label
-                    htmlFor="willing_to_relocate"
-                    className="text-sm text-gray-700"
-                  >
-                    Willing to Relocate
-                  </label>
-                </div>
+                {(
+                  [
+                    { id: "willing_to_relocate", key: "willingToRelocate", field: "willing_to_relocate" },
+                    { id: "smoking", key: "smoking", field: "smoking" },
+                    { id: "drinking", key: "drinking", field: "drinking" },
+                  ] as const
+                ).map(({ id, key, field }) => (
+                  <div key={id} className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      id={id}
+                      checked={formData[field] as boolean}
+                      onFocus={() => !isEditing && setIsEditing(true)}
+                      onChange={(e) =>
+                        setFormData({ ...formData, [field]: e.target.checked })
+                      }
+                      className="w-5 h-5 text-gold-500 rounded focus:ring-gold-500"
+                    />
+                    <label htmlFor={id} className="text-sm text-gray-700">
+                      {t(key)}
+                    </label>
+                  </div>
+                ))}
               </div>
 
               {/* Save Button */}
               {isEditing && (
                 <div className="flex gap-4">
                   <button
+                    type="button"
                     onClick={handleSaveProfile}
                     disabled={isLoading}
-                    className="flex-1 bg-gradient-to-r from-gold-500 to-teal-500 hover:from-gold-600 hover:to-teal-600 text-white px-8 py-4 rounded-card font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
+                    className="flex-1 bg-gradient-to-r from-gold-500 to-teal-500 hover:from-gold-600 hover:to-teal-600 text-white px-8 py-4 rounded-card font-semibold transition-all shadow-lg hover:shadow-xl disabled:opacity-50 min-h-11"
                   >
-                    {isLoading ? "Saving..." : "Save Profile"}
+                    {isLoading ? t("saving") : t("saveProfile")}
                   </button>
                   <button
-                    onClick={() => router.push(`/${locale}/discover`)}
-                    className="px-8 py-4 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-card font-semibold transition-all"
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="px-8 py-4 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-card font-semibold transition-all min-h-11"
                   >
-                    Skip for Now
+                    {t("skipForNow")}
                   </button>
                 </div>
               )}

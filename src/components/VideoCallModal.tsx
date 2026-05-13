@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -17,6 +18,7 @@ export default function VideoCallModal({
   matchName,
   matchImage,
 }: VideoCallModalProps) {
+  const t = useTranslations("common.videoCallModal");
   const [callStatus, setCallStatus] = useState<
     "connecting" | "connected" | "ended"
   >("connecting");
@@ -90,21 +92,12 @@ export default function VideoCallModal({
                     />
                   </div>
                   <h2 className="text-2xl font-bold mb-2">
-                    Calling {matchName}...
+                    {t("calling", { name: matchName })}
                   </h2>
                   <div className="flex items-center justify-center gap-2">
-                    <div
-                      className="w-2 h-2 bg-white rounded-full animate-bounce"
-                      style={{ animationDelay: "0ms" }}
-                    />
-                    <div
-                      className="w-2 h-2 bg-white rounded-full animate-bounce"
-                      style={{ animationDelay: "150ms" }}
-                    />
-                    <div
-                      className="w-2 h-2 bg-white rounded-full animate-bounce"
-                      style={{ animationDelay: "300ms" }}
-                    />
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-bounce-0" />
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-bounce-150" />
+                    <div className="w-2 h-2 bg-white rounded-full animate-bounce delay-bounce-300" />
                   </div>
                 </div>
               )}
@@ -126,7 +119,7 @@ export default function VideoCallModal({
                   </p>
                   <div className="mt-4 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-pill inline-flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-sm">Connected</span>
+                    <span className="text-sm">{t("connected")}</span>
                   </div>
                 </div>
               )}
@@ -134,9 +127,9 @@ export default function VideoCallModal({
               {callStatus === "ended" && (
                 <div className="text-center text-white">
                   <div className="text-6xl mb-4">📞</div>
-                  <h2 className="text-2xl font-bold mb-2">Call Ended</h2>
+                  <h2 className="text-2xl font-bold mb-2">{t("ended")}</h2>
                   <p className="text-white/70">
-                    Duration: {formatDuration(callDuration)}
+                    {t("duration", { duration: formatDuration(callDuration) })}
                   </p>
                 </div>
               )}
@@ -152,7 +145,7 @@ export default function VideoCallModal({
                 <div className="w-full h-full bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center text-white">
                   <div className="text-center">
                     <div className="text-4xl mb-2">👤</div>
-                    <p className="text-sm">You</p>
+                    <p className="text-sm">{t("you")}</p>
                   </div>
                 </div>
               </motion.div>
@@ -172,6 +165,7 @@ export default function VideoCallModal({
                         ? "bg-red-500 hover:bg-red-600"
                         : "bg-white/20 hover:bg-white/30"
                     }`}
+                    aria-label={isMuted ? t("unmute") : t("mute")}
                   >
                     {isMuted ? (
                       <svg
@@ -208,6 +202,7 @@ export default function VideoCallModal({
                     whileTap={{ scale: 0.95 }}
                     onClick={handleEndCall}
                     className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-colors shadow-lg"
+                    aria-label={t("endCall")}
                   >
                     <svg
                       className="w-8 h-8 text-white rotate-135"
@@ -228,6 +223,7 @@ export default function VideoCallModal({
                         ? "bg-red-500 hover:bg-red-600"
                         : "bg-white/20 hover:bg-white/30"
                     }`}
+                    aria-label={isVideoOff ? t("videoOn") : t("videoOff")}
                   >
                     {isVideoOff ? (
                       <svg
@@ -263,7 +259,9 @@ export default function VideoCallModal({
                 <div className="flex items-center justify-between text-white">
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-sm font-medium">Encrypted Call</span>
+                    <span className="text-sm font-medium">
+                      {t("encryptedCall")}
+                    </span>
                   </div>
                   <div className="text-sm font-medium">
                     {formatDuration(callDuration)}
@@ -276,7 +274,7 @@ export default function VideoCallModal({
             {callStatus === "connecting" && (
               <div className="absolute bottom-32 start-1/2 -translate-x-1/2 text-center">
                 <p className="text-white/70 text-sm px-6 py-3 bg-white/10 backdrop-blur-sm rounded-pill">
-                  🔒 This call is end-to-end encrypted
+                  🔒 {t("encryptedNotice")}
                 </p>
               </div>
             )}

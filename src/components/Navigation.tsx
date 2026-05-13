@@ -14,20 +14,24 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
-  const [activeMembers, setActiveMembers] = useState(1247);
+  const [activeMembers] = useState(1247);
   const [user, setUser] = useState<any>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showPoliciesMenu, setShowPoliciesMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  // Check if we're on the homepage
   const isHomePage = pathname === `/${locale}` || pathname === "/";
 
+  // Locale switcher preserves current path
+  const otherLocale = locale === "en" ? "ur" : "en";
+  const localizedPath = pathname.replace(new RegExp(`^/${locale}`), `/${otherLocale}`);
+
+  // Active link helper
+  const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -35,19 +39,14 @@ export default function Navigation() {
   useEffect(() => {
     const checkUser = async () => {
       const supabase = createClient();
-      const {
-        data: { user: authUser },
-      } = await supabase.auth.getUser();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
       setUser(authUser);
-
-      // Check if user is admin
       if (authUser) {
         const { data: adminData, error: adminError } = await supabase
           .from("admin_users")
           .select("id")
           .eq("id", authUser.id)
           .single();
-        // Treat 404 as not admin; any other error shouldn't hide the menu silently
         setIsAdmin(Boolean(adminData && !adminError));
       }
     };
@@ -61,15 +60,31 @@ export default function Navigation() {
     router.push(`/${locale}`);
   };
 
-  const otherLocale = locale === "en" ? "ur" : "en";
-
-  // On homepage: transparent → white on scroll
-  // On other pages: always white
   const navBg = isHomePage
     ? scrolled
       ? "bg-white/95 backdrop-blur-md shadow-md"
       : "bg-transparent"
     : "bg-white/95 backdrop-blur-md shadow-md";
+
+  const linkClass = (href: string) => {
+    const active = isActive(href);
+    if (isHomePage && !scrolled) {
+      return active
+        ? "text-gold-300 font-semibold border-b-2 border-gold-300 pb-0.5"
+        : "text-white hover:text-gold-300";
+    }
+    return active
+      ? "text-gold-600 font-semibold border-b-2 border-gold-500 pb-0.5"
+      : "text-gray-700 hover:text-gold-600";
+  };
+
+  const navLinks = [
+    { href: `/${locale}`, label: t("navigation.home"), authRequired: false },
+    { href: `/${locale}/discover`, label: t("navigation.discover"), authRequired: true },
+    { href: `/${locale}/messages`, label: t("navigation.messages"), authRequired: true },
+    { href: `/${locale}/pricing`, label: t("navigation.pricing"), authRequired: false },
+    { href: `/${locale}/bureau`, label: t("navigation.bureau"), authRequired: false },
+  ].filter((link) => !link.authRequired || user);
 
   return (
     <motion.nav
@@ -106,58 +121,24 @@ export default function Navigation() {
                 : "border-gray-200 text-gray-700 hover:bg-gray-100"
             }`}
             onClick={() => setShowMobileMenu((prev) => !prev)}
-            aria-expanded={showMobileMenu}
-            aria-label={
-              showMobileMenu
-                ? t("navigation.closeMenu")
-                : t("navigation.openMenu")
-            }
+            aria-label={showMobileMenu ? t("navigation.closeMenu") : t("navigation.openMenu")}
           >
             <span className="text-lg">{showMobileMenu ? "✕" : "☰"}</span>
           </button>
 
-          {/* Desktop/Tablet Nav */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-8">
-            <Link
-              href={`/${locale}`}
-              className={`text-sm font-medium transition-colors ${
-                isHomePage && !scrolled
-                  ? "text-white hover:text-gold-300"
-                  : "text-gray-700 hover:text-gold-600"
-              }`}
-            >
-              {t("navigation.home")}
-            </Link>
-            <Link
-              href={`/${locale}/discover`}
-              className={`text-sm font-medium transition-colors ${
-                isHomePage && !scrolled
-                  ? "text-white hover:text-gold-300"
-                  : "text-gray-700 hover:text-gold-600"
-              }`}
-            >
-              {t("navigation.discover")}
-            </Link>
-            <Link
-              href={`/${locale}/messages`}
-              className={`hidden lg:inline-flex text-sm font-medium transition-colors ${
-                isHomePage && !scrolled
-                  ? "text-white hover:text-gold-300"
-                  : "text-gray-700 hover:text-gold-600"
-              }`}
-            >
-              {t("navigation.messages")}
-            </Link>
-            <Link
-              href={`/${locale}/pricing`}
-              className={`text-sm font-medium transition-colors ${
-                isHomePage && !scrolled
-                  ? "text-white hover:text-gold-300"
-                  : "text-gray-700 hover:text-gold-600"
-              }`}
-            >
-              {t("navigation.pricing")}
-            </Link>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-4 lg:gap-6">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${linkClass(link.href)}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Policies dropdown */}
             <div
               className="relative"
               onMouseEnter={() => setShowPoliciesMenu(true)}
@@ -171,16 +152,14 @@ export default function Navigation() {
                     ? "text-white hover:text-gold-300"
                     : "text-gray-700 hover:text-gold-600"
                 }`}
-                aria-expanded={showPoliciesMenu}
                 aria-haspopup="true"
+                aria-expanded={showPoliciesMenu ? "true" : "false"}
               >
                 {t("navigation.policies")}
-                <span aria-hidden className="text-xs">
-                  ▾
-                </span>
+                <span aria-hidden className="text-xs">▾</span>
               </button>
               {showPoliciesMenu && (
-                <div className="absolute start-0 mt-2 w-52 rounded-lg border border-gray-200 bg-white shadow-lg py-2">
+                <div className="absolute start-0 mt-2 w-52 rounded-lg border border-gray-200 bg-white shadow-lg py-2 z-10">
                   <Link
                     href={`/${locale}/return-refund`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -198,35 +177,21 @@ export default function Navigation() {
                 </div>
               )}
             </div>
-            <Link
-              href={`/${locale}/bureau`}
-              className={`text-sm font-medium transition-colors ${
-                isHomePage && !scrolled
-                  ? "text-white hover:text-gold-300"
-                  : "text-gray-700 hover:text-gold-600"
-              }`}
-            >
-              {t("navigation.bureau")}
-            </Link>
 
-            {/* Subscription Counter */}
+            {/* Member counter */}
             <div
-              className={`hidden lg:flex px-4 py-2 rounded-pill border ${
+              className={`hidden lg:flex px-3 py-1.5 rounded-pill border text-xs font-semibold ${
                 isHomePage && !scrolled
                   ? "bg-white/10 border-white/20 text-white backdrop-blur-sm"
                   : "bg-gold-50 border-gold-200 text-gold-700"
               }`}
             >
-              <span className="text-xs font-semibold">
-                {t("subscription.counter", {
-                  count: activeMembers.toLocaleString(),
-                })}
-              </span>
+              {t("subscription.counter", { count: activeMembers.toLocaleString() })}
             </div>
 
-            {/* Locale Switcher */}
+            {/* Locale switcher — preserves current path */}
             <Link
-              href={`/${otherLocale}`}
+              href={localizedPath}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 isHomePage && !scrolled
                   ? "bg-white/10 text-white hover:bg-white/20"
@@ -236,10 +201,11 @@ export default function Navigation() {
               {otherLocale.toUpperCase()}
             </Link>
 
-            {/* User Menu or Sign In/Up */}
+            {/* Auth */}
             {user ? (
               <div className="relative">
                 <button
+                  type="button"
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center gap-2 px-4 py-2 rounded-pill bg-gold-500 hover:bg-gold-600 transition-colors"
                 >
@@ -250,9 +216,8 @@ export default function Navigation() {
                     {user.user_metadata?.full_name || user.email?.split("@")[0]}
                   </span>
                 </button>
-
                 {showUserMenu && (
-                  <div className="absolute end-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
+                  <div className="absolute end-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-10">
                     {isAdmin && (
                       <>
                         <Link
@@ -270,28 +235,28 @@ export default function Navigation() {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      My Profile
+                      {t("navigation.viewProfile")}
                     </Link>
                     <Link
                       href={`/${locale}/messages`}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      Messages
+                      {t("navigation.messages")}
                     </Link>
                     <hr className="my-2" />
                     <button
+                      type="button"
                       onClick={handleSignOut}
                       className="block w-full text-start px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                     >
-                      Sign Out
+                      {t("navigation.signOut")}
                     </button>
                   </div>
                 )}
               </div>
             ) : (
               <>
-                {/* Sign In */}
                 <Link
                   href={`/${locale}/auth/signin`}
                   className={`text-sm font-medium transition-colors ${
@@ -302,8 +267,6 @@ export default function Navigation() {
                 >
                   {t("navigation.signIn")}
                 </Link>
-
-                {/* CTA Button */}
                 <Link
                   href={`/${locale}/auth/signup`}
                   className="px-5 lg:px-6 py-2.5 bg-gold-500 hover:bg-gold-600 text-white rounded-pill font-semibold text-sm shadow-lg transition-all hover:shadow-xl"
@@ -318,7 +281,6 @@ export default function Navigation() {
         {/* Mobile Menu */}
         {showMobileMenu && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -327,8 +289,6 @@ export default function Navigation() {
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
               aria-hidden="true"
             />
-
-            {/* Menu Panel */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
@@ -337,7 +297,6 @@ export default function Navigation() {
               className="fixed top-0 start-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-2xl z-50 md:hidden overflow-y-auto"
             >
               <div className="p-6 space-y-4">
-                {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                   <Image
                     src="/assets/logo-golden.png"
@@ -347,6 +306,7 @@ export default function Navigation() {
                     className="h-10 w-auto"
                   />
                   <button
+                    type="button"
                     onClick={() => setShowMobileMenu(false)}
                     className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
                     aria-label={t("navigation.closeMenu")}
@@ -355,7 +315,6 @@ export default function Navigation() {
                   </button>
                 </div>
 
-                {/* User Section */}
                 {user && (
                   <div className="pb-4 border-b border-gray-200">
                     <Link
@@ -368,12 +327,9 @@ export default function Navigation() {
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900 text-base">
-                          {user.user_metadata?.full_name ||
-                            user.email?.split("@")[0]}
+                          {user.user_metadata?.full_name || user.email?.split("@")[0]}
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {t("navigation.viewProfile")}
-                        </div>
+                        <div className="text-sm text-gray-500">{t("navigation.viewProfile")}</div>
                       </div>
                     </Link>
                     {isAdmin && (
@@ -389,38 +345,21 @@ export default function Navigation() {
                   </div>
                 )}
 
-                {/* Navigation Links */}
                 <nav className="space-y-1" role="navigation">
-                  <Link
-                    href={`/${locale}`}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t("navigation.home")}
-                  </Link>
-                  <Link
-                    href={`/${locale}/discover`}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t("navigation.discover")}
-                  </Link>
-                  <Link
-                    href={`/${locale}/messages`}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t("navigation.messages")}
-                  </Link>
-                  <Link
-                    href={`/${locale}/pricing`}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t("navigation.pricing")}
-                  </Link>
-
-                  {/* Policies Submenu */}
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors min-h-11 ${
+                        isActive(link.href)
+                          ? "bg-gold-50 text-gold-700 font-semibold"
+                          : "text-gray-700 hover:bg-gold-50 hover:text-gold-700"
+                      }`}
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
                   <div className="space-y-1 ps-4 border-s-2 border-gray-200 ms-4">
                     <Link
                       href={`/${locale}/return-refund`}
@@ -437,39 +376,27 @@ export default function Navigation() {
                       {t("navigation.shippingService")}
                     </Link>
                   </div>
-
-                  <Link
-                    href={`/${locale}/bureau`}
-                    className="block px-4 py-3 text-base font-medium text-gray-700 hover:bg-gold-50 hover:text-gold-700 rounded-lg transition-colors min-h-11"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    {t("navigation.bureau")}
-                  </Link>
                 </nav>
 
-                {/* Subscription Counter */}
                 <div className="px-4 py-3 rounded-lg bg-gold-50 border border-gold-200">
                   <span className="text-base font-semibold text-gold-700">
-                    {t("subscription.counter", {
-                      count: activeMembers.toLocaleString(),
-                    })}
+                    {t("subscription.counter", { count: activeMembers.toLocaleString() })}
                   </span>
                 </div>
 
-                {/* Bottom Actions */}
                 <div className="pt-4 border-t border-gray-200 space-y-3">
-                  {/* Locale Switcher */}
                   <Link
-                    href={`/${otherLocale}`}
+                    href={localizedPath}
                     className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg text-base font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors min-h-11"
                     onClick={() => setShowMobileMenu(false)}
                   >
                     <span>🌐</span>
-                    <span>{otherLocale === "en" ? "English" : "اردو"}</span>
+                    <span>{otherLocale === "en" ? "English" : "Urdu"}</span>
                   </Link>
 
                   {user ? (
                     <button
+                      type="button"
                       onClick={async () => {
                         await handleSignOut();
                         setShowMobileMenu(false);

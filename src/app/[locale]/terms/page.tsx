@@ -9,7 +9,7 @@ export default function TermsPage() {
   const locale = useLocale();
   const t = useTranslations("common.legal.terms");
   const links = useTranslations("common.legal.links");
-  const contact = useTranslations("common.legal.contact");
+  const contact = useTranslations("common.legal.office");
   const useItems = t.raw("useItems") as string[];
   const paymentsItems = t.raw("paymentsItems") as string[];
   const conductItems = t.raw("conductItems") as string[];
