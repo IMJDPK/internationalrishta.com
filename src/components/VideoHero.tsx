@@ -31,17 +31,9 @@ export default function VideoHero() {
 
     mediaQuery.addEventListener("change", handleChange);
 
-    // Check if device is desktop/large screen
-    // Only play video on desktop (>= 1024px) and when user doesn't prefer reduced motion
-    const isLargeScreen = window.matchMedia("(min-width: 1024px)").matches;
-    const isFastConnection =
-      !("connection" in navigator) ||
-      (navigator as any).connection?.effectiveType === "4g" ||
-      (navigator as any).connection?.effectiveType === "wifi";
-
-    setShouldPlayVideo(
-      isLargeScreen && isFastConnection && !mediaQuery.matches,
-    );
+    // Play video on all screen sizes — muted autoplay is supported on mobile.
+    // The try/catch in the play() call handles any browser that blocks it.
+    setShouldPlayVideo(!mediaQuery.matches);
 
     return () => {
       mediaQuery.removeEventListener("change", handleChange);
@@ -160,7 +152,7 @@ export default function VideoHero() {
 
       {/* Video Indicators - Only show when video is active */}
       {shouldPlayVideo && !prefersReducedMotion && (
-        <div className="absolute bottom-32 start-1/2 -translate-x-1/2 z-20 flex gap-3">
+        <div className="absolute bottom-24 md:bottom-32 start-1/2 -translate-x-1/2 z-20 flex gap-3">
           {videos.map((_, idx) => (
             <button
               key={idx}
