@@ -1,77 +1,125 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import type { SourceChannel, SubscriptionTierDb } from "@/types/billing.types";
 import { useEffect, useState } from "react";
 
 export type SubscriptionTier = "free" | "premium";
-export type SubscriptionStatus = "active" | "expired" | "pending";
+export type SubscriptionStatus = "active" | "expired" | "pending" | "cancelled";
 
 export interface SubscriptionData {
   tier: SubscriptionTier;
   status: SubscriptionStatus;
   hasPremium: boolean;
+  accountActive: boolean;
+  subscriptionTierDb: SubscriptionTierDb | null;
+  sourceChannel: SourceChannel | null;
+  expiresAt: string | null;
+  isLoading: boolean;
   features: {
-    messaging: boolean;      // free for all connected matches
-    videoCall: boolean;      // premium only
-    voiceMessage: boolean;   // premium only
-    imageMessage: boolean;   // premium only
+    messaging: boolean;
+    videoCall: boolean;
+    voiceMessage: boolean;
+    imageMessage: boolean;
     unlimitedSwipes: boolean;
     profileBoosts: boolean;
     advancedFilters: boolean;
   };
 }
 
+const DEFAULT_FEATURES = {
+  messaging: true,
+  videoCall: false,
+  voiceMessage: false,
+  imageMessage: false,
+  unlimitedSwipes: true,
+  profileBoosts: false,
+  advancedFilters: false,
+};
+
+const DEFAULT_STATE: SubscriptionData = {
+  tier: "free",
+  status: "active",
+  hasPremium: false,
+  accountActive: false,
+  subscriptionTierDb: null,
+  sourceChannel: null,
+  expiresAt: null,
+  isLoading: true,
+  features: DEFAULT_FEATURES,
+};
+
+function mapProfileStatus(
+  subscriptionStatus: string | null | undefined
+): SubscriptionStatus {
+  if (subscriptionStatus === "expired") return "expired";
+  if (subscriptionStatus === "cancelled") return "cancelled";
+  if (subscriptionStatus === "active") return "active";
+  return "pending";
+}
+
 export function useSubscription(): SubscriptionData {
-  const [subscription, setSubscription] = useState<SubscriptionData>({
-    tier: "free",
-    status: "active",
-    hasPremium: false,
-    features: {
-      messaging: true,
-      videoCall: false,
-      voiceMessage: false,
-      imageMessage: false,
-      unlimitedSwipes: true,
-      profileBoosts: false,
-      advancedFilters: false,
-    },
-  });
+  const [subscription, setSubscription] = useState<SubscriptionData>(
+    DEFAULT_STATE
+  );
 
   useEffect(() => {
-    const checkSubscription = async () => {
+    const loadSubscription = async () => {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-      if (!user) return;
+      if (!user) {
+        setSubscription({ ...DEFAULT_STATE, isLoading: false });
+        return;
+      }
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("subscription_tier")
+        .select("account_active, subscription_tier, subscription_status")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
-      const isPremium =
-        profile?.subscription_tier === "premium" ||
-        profile?.subscription_tier === "direct" ||
-        profile?.subscription_tier === "bureau";
+      const { data: activeSub } = await supabase
+        .from("subscriptions")
+        .select("source_channel, tier, period_end, paid")
+        .eq("user_id", user.id)
+        .eq("paid", true)
+        .order("period_end", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const accountActive = profile?.account_active === true;
+      const hasPremium = accountActive;
+      const status = mapProfileStatus(profile?.subscription_status);
 
       setSubscription({
-        tier: isPremium ? "premium" : "free",
-        status: "active",
-        hasPremium: isPremium,
+        tier: hasPremium ? "premium" : "free",
+        status,
+        hasPremium,
+        accountActive,
+        subscriptionTierDb:
+          (activeSub?.tier as SubscriptionTierDb | undefined) ??
+          (profile?.subscription_tier as SubscriptionTierDb | undefined) ??
+          null,
+        sourceChannel:
+          (activeSub?.source_channel as SourceChannel | undefined) ?? null,
+        expiresAt: activeSub?.period_end ?? null,
+        isLoading: false,
         features: {
           messaging: true,
-          videoCall: isPremium,
-          voiceMessage: isPremium,
-          imageMessage: isPremium,
+          videoCall: hasPremium,
+          voiceMessage: hasPremium,
+          imageMessage: hasPremium,
           unlimitedSwipes: true,
-          profileBoosts: isPremium,
-          advancedFilters: isPremium,
+          profileBoosts: hasPremium,
+          advancedFilters: hasPremium,
         },
       });
     };
 
-    checkSubscription();
+    loadSubscription();
   }, []);
 
   return subscription;

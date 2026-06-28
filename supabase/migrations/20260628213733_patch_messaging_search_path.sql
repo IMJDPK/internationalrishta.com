@@ -2,6 +2,7 @@
 -- Patch: lock search_path on enforce_messages_read_only_update()
 -- Resolves Supabase advisor lint 0011 (function_search_path_mutable)
 -- Feature: 20260629-013131-persistent-messaging
+-- Applied on remote via MCP; version timestamp matches schema_migrations row.
 -- =============================================================================
 
 CREATE OR REPLACE FUNCTION public.enforce_messages_read_only_update()
