@@ -1,0 +1,47 @@
+# Dependencies & build output (large, regenerated)
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+
+# Lock files (large; package.json is enough for context)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Generated / cache
+*.tsbuildinfo
+.turbo/
+.cache/
+.vercel/
+.supabase/
+
+# Environment & secrets (never index)
+.env
+.env.*
+!.env.local.example
+
+# Large media (videos, raw design exports)
+public/assets/
+assets/
+**/*.mp4
+**/*.mov
+**/*.webm
+**/*.zip
+**/*.tar.gz
+
+# Spec Kit / agent tooling (optional noise during app development)
+.specify/
+
+# Historical docs with stale examples (see docs/initial-development-doc-001.md)
+docs/old_implemented_docs/
+
+# OS / editor noise
+.DS_Store
+.idea/
+
+# SSH keys
+id_*
+*.pem

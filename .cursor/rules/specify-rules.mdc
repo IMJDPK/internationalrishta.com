@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan:
+
+- **Implementation plan:** `specs/20260629-013131-persistent-messaging/plan.md`
+- **Feature constitution:** `.specify/persistent-messaging/constitution.md`
+- **Branch:** `20260629-013131-persistent-messaging`
+- **Stack:** Next.js 15 App Router, Supabase (`@supabase/ssr`), next-intl, Tailwind logical RTL
+- **Messaging migration:** `supabase/messaging-rls-migration.sql` (to be created in implementation)
+<!-- SPECKIT END -->

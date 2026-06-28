@@ -1,35 +1,102 @@
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# testing
+# Testing
 /coverage
+*.lcov
+.nyc_output
 
-# next.js
+# Next.js
 /.next/
 /out/
+next-env.d.ts
 
-# production
+# Production / build output
 /build
+/dist
+*.tsbuildinfo
 
-# misc
-.DS_Store
+# Environment & secrets
+.env
+.env.*
+!.env.local.example
+.env*.local
 *.pem
+*.key
+*.crt
+client_secret_*.json
+credentials.json
+service-account*.json
 
-# debug
+# SSH / deploy keys (keep out of repo)
+id_*
+!id_*.example
+
+# Vercel
+.vercel
+
+# Supabase local
+.supabase/
+
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
 
-# local env files
-.env*.local
-.env
+# OS / editor
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# vercel
-.vercel
+# IDE (local only — project .vscode is tracked intentionally)
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-client_secret_*.json
+# Backup / temp artifacts
+*.bak
+*.tmp
+*.temp
+.cache/
+
+# Large local media (add assets locally; do not commit binaries)
+/public/assets/**/*.mp4
+/public/assets/**/*.mov
+/public/assets/**/*.webm
+/assets/**/*.mp4
+/assets/**/*.mov
+/assets/**/*.webm
+
+# Optional: uncomment if you store large design exports locally
+# /public/assets/
+# /assets/
+
+# Terraform (if added later)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+
+# Docker local overrides
+docker-compose.override.yml
