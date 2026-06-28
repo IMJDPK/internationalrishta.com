@@ -2,7 +2,7 @@
 
 **Branch:** `20260629-013131-persistent-messaging`  
 **Input:** `plan.md`, `spec.md`, `data-model.md`, `contracts/messaging-ui.md`, `research.md`  
-**Status:** US1–US3 server pipeline (T002, T003–T017) · 18/34 tasks complete
+**Status:** US4 Realtime complete (T018–T022) · 23/34 tasks complete
 
 **Organization:** Phases follow user stories US1–US6 from `spec.md`. Tasks use strict checklist format.
 
@@ -79,11 +79,11 @@
 
 **Independent test:** Two browsers — send from A appears on B without refresh; channel removed on thread switch.
 
-- [ ] T018 [US4] Create `src/hooks/useMessageRealtime.ts` with `supabase.channel(\`messages:${matchId}\`)` lifecycle
-- [ ] T019 [US4] In `src/hooks/useMessageRealtime.ts` subscribe to `postgres_changes` INSERT/UPDATE on `public.messages` with filter `match_id=eq.${matchId}`
-- [ ] T020 [US4] In `src/hooks/useMessageRealtime.ts` call `supabase.removeChannel` on `matchId` change and component unmount
-- [ ] T021 [US4] Implement optimistic send helper in `src/lib/messaging/send-message.ts` (pending id, INSERT via `src/lib/supabase/client.ts`, rollback on error)
-- [ ] T022 [US4] Wire `onInsert`/`onUpdate` handlers to merge Realtime payloads without duplicate ids
+- [x] T018 [US4] Create `src/hooks/useMessageRealtime.ts` with `supabase.channel(\`messages:${matchId}\`)` lifecycle
+- [x] T019 [US4] In `src/hooks/useMessageRealtime.ts` subscribe to `postgres_changes` INSERT/UPDATE on `public.messages` with filter `match_id=eq.${matchId}`
+- [x] T020 [US4] In `src/hooks/useMessageRealtime.ts` call `supabase.removeChannel` on `matchId` change and component unmount
+- [x] T021 [US4] Implement optimistic send helper in `src/lib/messaging/send-message.ts` (pending id, INSERT via `src/lib/supabase/client.ts`, rollback on error)
+- [x] T022 [US4] Wire `onInsert`/`onUpdate` handlers to merge Realtime payloads without duplicate ids
 
 **Checkpoint:** Realtime hook ready for `MessagesClient.tsx` integration.
 
