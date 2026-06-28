@@ -1,6 +1,7 @@
 "use client";
 
 import { type FilterValues } from "@/components/DiscoverFilters";
+import { assetPath, ASSETS } from "@/lib/assets";
 import { emptyAnimation } from "@/lib/lottieAnimations";
 import { AnimatePresence, motion, PanInfo, useMotionValue, useTransform } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -70,7 +71,7 @@ function ProfileCard({ profile, onSwipe, style, fullBleed }: ProfileCardProps) {
       >
         <div className="relative w-full h-full overflow-hidden select-none bg-gray-900">
           <Image
-            src={profile.image}
+            src={assetPath(profile.image)}
             alt={profile.name}
             fill
             className="object-cover pointer-events-none"
@@ -144,7 +145,7 @@ function ProfileCard({ profile, onSwipe, style, fullBleed }: ProfileCardProps) {
       <div className="bg-white rounded-2xl shadow-2xl overflow-hidden select-none max-w-md mx-auto">
         <div className="relative h-[420px] sm:h-[480px] bg-gradient-to-br from-gold-100 to-teal-100">
           <Image
-            src={profile.image}
+            src={assetPath(profile.image)}
             alt={profile.name}
             fill
             className="object-cover pointer-events-none"
@@ -399,7 +400,7 @@ export default function ProfileCards({ filters, fullBleed }: ProfileCardsProps) 
                 <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="text-white/90 text-lg mb-6">{t("matchDesc", { name: matchedProfile.name })}</motion.p>
                 <div className="flex items-center justify-center gap-4 mb-8">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <Image src="/assets/logo-golden.png" alt="You" width={80} height={80} className="object-cover w-full h-full" />
+                    <Image src={ASSETS.logo} alt="You" width={80} height={80} className="object-cover w-full h-full" />
                   </div>
                   <span className="text-white text-3xl font-black">❤️</span>
                   <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-xl">
@@ -524,7 +525,7 @@ export default function ProfileCards({ filters, fullBleed }: ProfileCardsProps) 
               <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="text-white/90 text-lg mb-6">{t("matchDesc", { name: matchedProfile.name })}</motion.p>
               <div className="flex items-center justify-center gap-4 mb-8">
                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                  <Image src="/assets/logo-golden.png" alt="You" width={80} height={80} className="object-cover w-full h-full" />
+                  <Image src={ASSETS.logo} alt="You" width={80} height={80} className="object-cover w-full h-full" />
                 </div>
                 <span className="text-white text-3xl font-black">❤️</span>
                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-xl">

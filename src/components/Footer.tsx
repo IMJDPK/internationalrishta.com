@@ -1,5 +1,6 @@
 "use client";
 
+import { ASSETS } from "@/lib/assets";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +17,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Image
-                src="/assets/logo-golden.png"
+                src={ASSETS.logo}
                 alt="International Rishta"
                 width={160}
                 height={53}

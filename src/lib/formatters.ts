@@ -74,3 +74,52 @@ export function isValidPhone(value: string): boolean {
   const phonePattern = /^(\+92|0)?3\d{2}[- ]?\d{7}$/;
   return phonePattern.test(value.trim());
 }
+
+/** Locale-aware time for message bubbles (e.g. 10:30 AM). */
+export function formatMessageTime(locale: string, isoDate: string): string {
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const resolvedLocale = locale === "ur" ? "ur-PK" : locale;
+  return new Intl.DateTimeFormat(resolvedLocale, {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+/** Relative time for conversation list previews (e.g. Just now, 2 minutes ago). */
+export function formatRelativeTime(
+  locale: string,
+  isoDate: string,
+  justNowLabel = "Just now"
+): string {
+  const date = new Date(isoDate);
+  if (Number.isNaN(date.getTime())) return justNowLabel;
+
+  const now = Date.now();
+  const diffMs = date.getTime() - now;
+  const diffSec = Math.round(diffMs / 1000);
+  const absSec = Math.abs(diffSec);
+
+  if (absSec < 60) return justNowLabel;
+
+  const resolvedLocale = locale === "ur" ? "ur-PK" : locale;
+  const rtf = new Intl.RelativeTimeFormat(resolvedLocale, { numeric: "auto" });
+
+  const absMin = Math.round(absSec / 60);
+  if (absMin < 60) {
+    return rtf.format(Math.round(diffSec / 60), "minute");
+  }
+
+  const absHours = Math.round(absSec / 3600);
+  if (absHours < 24) {
+    return rtf.format(Math.round(diffSec / 3600), "hour");
+  }
+
+  const absDays = Math.round(absSec / 86400);
+  if (absDays < 7) {
+    return rtf.format(Math.round(diffSec / 86400), "day");
+  }
+
+  return formatMessageTime(locale, isoDate);
+}
