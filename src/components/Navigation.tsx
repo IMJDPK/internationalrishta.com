@@ -1,5 +1,6 @@
 "use client";
 
+import { ASSETS } from "@/lib/assets";
 import { createClient } from "@/lib/supabase/client";
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -97,7 +98,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center">
             <Image
-              src="/assets/logo-golden.png"
+              src={ASSETS.logo}
               alt={t("siteName")}
               width={200}
               height={67}
@@ -299,7 +300,7 @@ export default function Navigation() {
               <div className="p-6 space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b border-gray-200">
                   <Image
-                    src="/assets/logo-golden.png"
+                    src={ASSETS.logo}
                     alt={t("siteName")}
                     width={150}
                     height={50}

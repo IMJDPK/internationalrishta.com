@@ -1,5 +1,6 @@
 "use client";
 
+import { ASSETS } from "@/lib/assets";
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -13,11 +14,7 @@ export default function VideoHero() {
   const [shouldPlayVideo, setShouldPlayVideo] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  const videos = [
-    "/assets/Banner-Video-01-15-21.mp4",
-    "/assets/Banner-Video-07-06-21.mp4",
-    "/assets/Banner-Video-10-24-19.mp4",
-  ];
+  const videos = ASSETS.heroVideos;
 
   // Detect if device is mobile or user prefers reduced motion
   useEffect(() => {
@@ -61,7 +58,7 @@ export default function VideoHero() {
           loop
           playsInline
           preload="metadata"
-          poster="/assets/Banner - International RishtaConnecting Hearts Worldwide.png"
+          poster={ASSETS.heroPoster}
           onLoadedData={() => setIsVideoLoaded(true)}
         >
           <source src={videos[currentVideo]} type="video/mp4" />
@@ -71,8 +68,7 @@ export default function VideoHero() {
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{
-            backgroundImage:
-              "url('/assets/Banner - International RishtaConnecting Hearts Worldwide.png')",
+            backgroundImage: `url('${ASSETS.heroPoster}')`,
           }}
         />
       )}

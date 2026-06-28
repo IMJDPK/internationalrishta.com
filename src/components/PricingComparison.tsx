@@ -1,5 +1,6 @@
 'use client';
 
+import { ASSETS } from '@/lib/assets';
 import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -151,7 +152,7 @@ export default function PricingComparison() {
             <p className="text-gray-600 mb-4">Pay securely through JazzCash mobile wallet or Raast instant payments.</p>
             <div className="bg-gray-50 p-4 rounded-lg">
               <Image
-                src="/assets/raast-payment.png"
+                src={ASSETS.raastPayment}
                 alt="Raast Payment"
                 width={200}
                 height={60}

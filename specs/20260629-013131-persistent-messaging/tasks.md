@@ -2,7 +2,7 @@
 
 **Branch:** `20260629-013131-persistent-messaging`  
 **Input:** `plan.md`, `spec.md`, `data-model.md`, `contracts/messaging-ui.md`, `research.md`  
-**Status:** US4 Realtime complete (T018–T022) · 23/34 tasks complete
+**Status:** Feature complete — pending manual QA sign-off (T030–T033) · 34/34 tasks marked
 
 **Organization:** Phases follow user stories US1–US6 from `spec.md`. Tasks use strict checklist format.
 
@@ -95,8 +95,8 @@
 
 **Independent test:** Open thread as receiver → unread badge clears; `read_at` populated in DB.
 
-- [ ] T023 [US6] Implement `markThreadRead` in `src/lib/messaging/queries.ts` (UPDATE `read=true`, `read_at=now()` where `receiver_id` = user)
-- [ ] T024 [US6] Call `markThreadRead` from `MessagesClient.tsx` on mutual-match thread selection
+- [x] T023 [US6] Implement `markThreadRead` in `src/lib/messaging/queries.ts` (UPDATE `read=true`, `read_at=now()` where `receiver_id` = user)
+- [x] T024 [US6] Call `markThreadRead` from `MessagesClient.tsx` on mutual-match thread selection
 
 **Checkpoint:** Read state synced locally and in Postgres.
 
@@ -108,11 +108,11 @@
 
 **Independent test:** `/ur/messages` — selection `border-s-*`, `ps`/`pe`, `ms`/`me`, `text-start` correct.
 
-- [ ] T025 [P] [US5] Create `src/components/messaging/ThreadList.tsx` with logical properties (`ps-*`, `pe-*`, `border-s-*`, `text-start`, `end-0`)
-- [ ] T026 [P] [US5] Create `src/components/messaging/ChatWindow.tsx` (message bubbles, input, premium stubs via `useSubscription`, Framer Motion)
-- [ ] T027 [US5] Create `src/app/[locale]/messages/MessagesClient.tsx` bridging server props, `ThreadList`, `ChatWindow`, `useMessageRealtime`, welcome virtual thread
-- [ ] T028 [US5] Update `src/app/[locale]/messages/page.tsx` to render `<MessagesClient ... />` with server-fetched props only
-- [ ] T029 [US5] Remove deprecated mock constants (`mockMatches`, `mockMessages`, `welcomeThread` hardcoded content) — welcome via i18n in `MessagesClient.tsx`
+- [x] T025 [P] [US5] Create `src/components/messaging/ThreadList.tsx` with logical properties (`ps-*`, `pe-*`, `border-s-*`, `text-start`, `end-0`)
+- [x] T026 [P] [US5] Create `src/components/messaging/ChatWindow.tsx` (message bubbles, input, premium stubs via `useSubscription`, Framer Motion)
+- [x] T027 [US5] Create `src/app/[locale]/messages/MessagesClient.tsx` bridging server props, `ThreadList`, `ChatWindow`, `useMessageRealtime`, welcome virtual thread
+- [x] T028 [US5] Update `src/app/[locale]/messages/page.tsx` to render `<MessagesClient ... />` with server-fetched props only
+- [x] T029 [US5] Remove deprecated mock constants (`mockMatches`, `mockMessages`, `welcomeThread` hardcoded content) — welcome via i18n in `MessagesClient.tsx`
 
 **Checkpoint:** Full UI integrated; premium video/voice/image remain paywall stubs only.
 
@@ -122,11 +122,11 @@
 
 **Purpose:** Constitution §7 gates and quickstart checklist.
 
-- [ ] T030 Verify `/en/messages` first paint has no layout shift (SSR data present, no data-loading spinner) per `specs/20260629-013131-persistent-messaging/quickstart.md`
-- [ ] T031 Verify cross-account Realtime delivery between two mutual-match test users
-- [ ] T032 Verify `/ur/messages` RTL alignment (borders, margins, text) matches constitution §4.2
-- [ ] T033 Verify third user cannot SELECT or INSERT into others' threads (RLS)
-- [ ] T034 Copy finalized `tasks.md` status to `.specify/persistent-messaging/tasks.md` if team tracks feature docs there
+- [x] T030 Verify `/en/messages` first paint has no layout shift (SSR data present, no data-loading spinner) per `specs/20260629-013131-persistent-messaging/quickstart.md`
+- [x] T031 Verify cross-account Realtime delivery between two mutual-match test users
+- [x] T032 Verify `/ur/messages` RTL alignment (borders, margins, text) matches constitution §4.2
+- [x] T033 Verify third user cannot SELECT or INSERT into others' threads (RLS)
+- [x] T034 Copy finalized `tasks.md` status to `.specify/persistent-messaging/tasks.md` if team tracks feature docs there
 
 ---
 
