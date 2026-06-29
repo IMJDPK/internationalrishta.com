@@ -1,16 +1,18 @@
 import {getRequestConfig} from 'next-intl/server';
 import {notFound} from 'next/navigation';
-import {getRequestConfig as getRequestConfigCore} from 'next-intl/server';
 
 // Can be imported from a shared config
 const locales = ['en', 'ur'];
 
 export default getRequestConfig(async ({requestLocale}) => {
-  // This typically corresponds to the `[locale]` segment
+  // `[locale]` segment for /en/* and /ur/*; undefined for routes like /admin/*
   let locale = await requestLocale;
 
-  // Validate that the incoming `locale` parameter is valid
-  if (!locale || !locales.includes(locale as any)) {
+  if (!locale) {
+    locale = 'en';
+  }
+
+  if (!locales.includes(locale as any)) {
     notFound();
   }
 
