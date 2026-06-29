@@ -14,6 +14,7 @@ export default function SignupPage() {
   const locale = useLocale();
   const t = useTranslations("common.auth.signup");
   const tAuth = useTranslations("common.auth");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const appUrl =
     process.env.NEXT_PUBLIC_APP_URL ||
@@ -31,6 +32,8 @@ export default function SignupPage() {
   const [captchaQuestion, setCaptchaQuestion] = useState("");
   const [captchaAnswer, setCaptchaAnswer] = useState(0);
   const [error, setError] = useState("");
+  const [referralWarning, setReferralWarning] = useState("");
+  const [signupComplete, setSignupComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const referralPattern = /^[A-Z0-9]{3,10}-[A-Z]{3}$/;
 
@@ -79,7 +82,7 @@ export default function SignupPage() {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${appUrl}/${locale}/discover`,
+        redirectTo: `${appUrl}/auth/callback?next=/${locale}/discover`,
       },
     });
     if (authError) setError(authError.message);
@@ -132,8 +135,24 @@ export default function SignupPage() {
     if (authError) {
       setError(authError.message);
     } else {
-      // Redirect to profile to complete registration
-      router.push(`/${locale}/profile`);
+      let invalidReferral = false;
+      try {
+        const attrRes = await fetch("/api/referral/attribute", { method: "POST" });
+        if (attrRes.ok) {
+          const attrData = await attrRes.json();
+          invalidReferral =
+            !attrData.attributed && attrData.reason === "invalid_code";
+        }
+      } catch {
+        // Non-blocking — signup succeeded; attribution can be retried later
+      }
+
+      if (invalidReferral) {
+        setReferralWarning(tCommon("bureau.referral.invalidCode"));
+        setSignupComplete(true);
+      } else {
+        router.push(`/${locale}/profile`);
+      }
     }
     setIsLoading(false);
   };
@@ -174,6 +193,29 @@ export default function SignupPage() {
               transition={{ delay: 0.1 }}
               className="bg-white/80 backdrop-blur-sm rounded-card shadow-xl border border-white/20 p-8 md:p-12"
             >
+              {signupComplete ? (
+                <div className="space-y-6 text-center">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {t("nextStepsTitle")}
+                  </h2>
+                  {referralWarning && (
+                    <div
+                      role="alert"
+                      className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 text-start"
+                    >
+                      {referralWarning}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/${locale}/profile`)}
+                    className="w-full bg-gold-500 hover:bg-gold-600 text-white font-bold py-4 rounded-card transition-colors"
+                  >
+                    {t("continue")}
+                  </button>
+                </div>
+              ) : (
+                <>
               {/* Progress Bar */}
               <div className="mb-10">
                 <div className="flex items-center justify-between mb-3">
@@ -461,6 +503,8 @@ export default function SignupPage() {
 
                   {error && <p className="text-sm text-red-600">{error}</p>}
                 </motion.div>
+              )}
+                </>
               )}
             </motion.div>
           </div>

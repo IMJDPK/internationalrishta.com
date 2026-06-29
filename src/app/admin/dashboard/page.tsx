@@ -5,6 +5,7 @@ import Navigation from "@/components/Navigation";
 import { ToastContainer, useToast } from "@/components/Toast";
 import { createClient } from "@/lib/supabase/client";
 import type { DbPaymentNotificationRow } from "@/types/billing.types";
+import type { CommissionType } from "@/types/bureau.types";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -37,6 +38,9 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("users");
   const [pendingUsers, setPendingUsers] = useState<PendingProfileRow[]>([]);
   const [pendingBureaus, setPendingBureaus] = useState<PendingBureauRow[]>([]);
+  const [bureauCommissionDraft, setBureauCommissionDraft] = useState<
+    Record<string, { commissionType: CommissionType; commissionRate: number }>
+  >({});
   const [pendingManualPayments, setPendingManualPayments] = useState<
     DbPaymentNotificationRow[]
   >([]);
@@ -96,14 +100,28 @@ export default function AdminDashboard() {
 
     setPendingUsers((users as PendingProfileRow[]) || []);
 
-    // Load pending bureaus
+    // Load pending bureaus (not yet approved)
     const { data: bureaus } = await supabase
       .from("marriage_bureaus")
       .select("*")
-      .in("status", ["pending", "payment_pending"])
+      .eq("is_approved", false)
+      .neq("status", "rejected")
       .order("created_at", { ascending: false });
 
-    setPendingBureaus((bureaus as PendingBureauRow[]) || []);
+    const pendingRows = (bureaus as PendingBureauRow[]) || [];
+    setPendingBureaus(pendingRows);
+    setBureauCommissionDraft((prev) => {
+      const next = { ...prev };
+      for (const bureau of pendingRows) {
+        if (!next[bureau.id]) {
+          next[bureau.id] = {
+            commissionType: "percentage",
+            commissionRate: 0.25,
+          };
+        }
+      }
+      return next;
+    });
 
     const { data: manualPayments } = await supabase
       .from("payment_notifications")
@@ -132,7 +150,7 @@ export default function AdminDashboard() {
       activeUsers: activeUsersCount || 0,
       pendingPayments: (manualPayments || []).length,
       totalBureaus: totalBureausCount || 0,
-      pendingBureaus: (bureaus || []).length,
+      pendingBureaus: pendingRows.length,
     });
 
     setIsLoading(false);
@@ -217,40 +235,54 @@ export default function AdminDashboard() {
   };
 
   const approveBureau = async (bureauId: string) => {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("marriage_bureaus")
-      .update({
-        status: "approved",
-        verified: true,
-        registration_fee_paid: true,
-        payment_verified_at: new Date().toISOString(),
-        licensed_at: new Date().toISOString(),
-      })
-      .eq("id", bureauId);
+    const draft = bureauCommissionDraft[bureauId] ?? {
+      commissionType: "percentage" as CommissionType,
+      commissionRate: 0.25,
+    };
 
-    if (error) {
-      showToast("error", "Error approving bureau: " + error.message);
-    } else {
+    try {
+      const response = await fetch("/api/admin/approve-bureau", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bureauId,
+          action: "approve",
+          commissionType: draft.commissionType,
+          commissionRate: draft.commissionRate,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        showToast("error", data.error || "Error approving bureau");
+        return;
+      }
+
       showToast("success", "Bureau approved successfully!");
       loadDashboardData();
+    } catch {
+      showToast("error", "Error approving bureau");
     }
   };
 
   const rejectBureau = async (bureauId: string) => {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("marriage_bureaus")
-      .update({
-        status: "rejected",
-      })
-      .eq("id", bureauId);
+    try {
+      const response = await fetch("/api/admin/approve-bureau", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bureauId, action: "reject" }),
+      });
 
-    if (error) {
-      showToast("error", "Error rejecting bureau: " + error.message);
-    } else {
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        showToast("error", data.error || "Error rejecting bureau");
+        return;
+      }
+
       showToast("info", "Bureau rejected");
       loadDashboardData();
+    } catch {
+      showToast("error", "Error rejecting bureau");
     }
   };
 
@@ -621,17 +653,82 @@ export default function AdminDashboard() {
                           <p className="text-white">{bureau.address}</p>
                         </div>
 
-                        <div className="bg-gray-900 rounded p-3">
-                          <p className="text-gray-400 text-sm mb-1">
-                            Registration Fee
-                          </p>
-                          <p className="text-2xl font-bold text-white">
-                            PKR 10,000
-                          </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 rounded-lg border border-gray-700 bg-gray-900/60 p-4">
+                          <div>
+                            <label
+                              htmlFor={`commission-type-${bureau.id}`}
+                              className="text-gray-400 text-sm mb-1 block"
+                            >
+                              Commission type
+                            </label>
+                            <select
+                              id={`commission-type-${bureau.id}`}
+                              value={
+                                bureauCommissionDraft[bureau.id]
+                                  ?.commissionType ?? "percentage"
+                              }
+                              onChange={(e) =>
+                                setBureauCommissionDraft((prev) => ({
+                                  ...prev,
+                                  [bureau.id]: {
+                                    commissionType: e.target
+                                      .value as CommissionType,
+                                    commissionRate:
+                                      prev[bureau.id]?.commissionRate ?? 0.25,
+                                  },
+                                }))
+                              }
+                              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white"
+                            >
+                              <option value="percentage">Percentage</option>
+                              <option value="flat">Flat (PKR)</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label
+                              htmlFor={`commission-rate-${bureau.id}`}
+                              className="text-gray-400 text-sm mb-1 block"
+                            >
+                              {bureauCommissionDraft[bureau.id]
+                                ?.commissionType === "flat"
+                                ? "Commission amount (PKR)"
+                                : "Commission rate (decimal, 0.25 = 25%)"}
+                            </label>
+                            <input
+                              id={`commission-rate-${bureau.id}`}
+                              type="number"
+                              min="0"
+                              step={
+                                bureauCommissionDraft[bureau.id]
+                                  ?.commissionType === "flat"
+                                  ? "1"
+                                  : "0.01"
+                              }
+                              value={
+                                bureauCommissionDraft[bureau.id]
+                                  ?.commissionRate ?? 0.25
+                              }
+                              onChange={(e) => {
+                                const value = parseFloat(e.target.value);
+                                setBureauCommissionDraft((prev) => ({
+                                  ...prev,
+                                  [bureau.id]: {
+                                    commissionType:
+                                      prev[bureau.id]?.commissionType ??
+                                      "percentage",
+                                    commissionRate: Number.isFinite(value)
+                                      ? value
+                                      : 0,
+                                  },
+                                }));
+                              }}
+                              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white"
+                            />
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex gap-3 ml-6">
+                      <div className="flex gap-3 ms-6">
                         <button
                           onClick={() => approveBureau(bureau.id)}
                           className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold transition-colors"

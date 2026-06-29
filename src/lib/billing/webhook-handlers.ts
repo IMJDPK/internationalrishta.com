@@ -5,6 +5,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type Stripe from "stripe";
+import { accrueCommissionForSubscription } from "@/lib/bureau/accrue-commission";
 import {
   getAmountForBillingPlan,
   isBillingPlanTier,
@@ -146,15 +147,24 @@ export async function handleCheckoutSessionCompleted(
       );
     }
   } else {
-    const { error: insertError } = await supabase
+    const { data: inserted, error: insertError } = await supabase
       .from("subscriptions")
-      .insert(subscriptionRow);
+      .insert(subscriptionRow)
+      .select("id")
+      .single();
 
     if (insertError) {
       throw new Error(
         `[webhook-handlers] subscriptions insert failed: ${insertError.message}`
       );
     }
+
+    await accrueCommissionForSubscription({
+      subscriptionId: inserted.id,
+      userId,
+      tier: subscriptionTier,
+      subscriptionAmount: amount,
+    });
   }
 
   const { error: profileError } = await supabase

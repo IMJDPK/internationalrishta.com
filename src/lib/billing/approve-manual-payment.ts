@@ -2,6 +2,7 @@
  * Server-side manual payment approval — service role writes to subscriptions.
  */
 
+import { accrueCommissionForSubscription } from "@/lib/bureau/accrue-commission";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { SubscriptionTierDb } from "@/types/billing.types";
 
@@ -60,7 +61,7 @@ export async function approveManualPaymentNotification(
     );
   }
 
-  const { error: subscriptionError } = await supabase
+  const { data: insertedSubscription, error: subscriptionError } = await supabase
     .from("subscriptions")
     .insert({
       user_id: notification.user_id,
@@ -78,7 +79,9 @@ export async function approveManualPaymentNotification(
       stripe_customer_id: null,
       stripe_subscription_id: null,
       price_id: null,
-    });
+    })
+    .select("id")
+    .single();
 
   if (subscriptionError) {
     throw new Error(
@@ -105,6 +108,13 @@ export async function approveManualPaymentNotification(
       `[approve-manual-payment] profile update failed: ${profileError.message}`
     );
   }
+
+  await accrueCommissionForSubscription({
+    subscriptionId: insertedSubscription.id,
+    userId: notification.user_id,
+    tier,
+    subscriptionAmount: notification.amount,
+  });
 }
 
 export async function rejectManualPaymentNotification(

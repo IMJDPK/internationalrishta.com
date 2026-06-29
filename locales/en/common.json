@@ -79,8 +79,8 @@
           "accountTitleName": "IMJD YOUR DIGITAL MEDIA PARTNER",
           "accountNumber": "Account Number:",
           "accountNumberValue": "50347000837855",
-          "depositNote": "⚠️ Deposit PKR 20,000 now and upload proof below",
-          "uploadProof": "Upload Payment Proof (Screenshot/Receipt) *",
+          "depositNote": "⚠️ Deposit PKR 20,000 now and upload proof below (optional for MVP — admin may request proof separately)",
+          "uploadProof": "Upload Payment Proof (Screenshot/Receipt) — optional",
           "uploadPlaceholder": "Click to upload or drag and drop",
           "uploadHint": "PNG, JPG, or PDF up to 5MB",
           "termsAccept": "I understand and accept the {termsLink}. I acknowledge that the application fee is non-refundable and that approval is subject to review (14-day SLA).",
@@ -89,6 +89,37 @@
           "nextStepsNote": "After submission, our team will review your application within 14 days. You'll receive an email with approval status. If approved, you'll pay the PKR 200,000 registration fee and receive your license.",
           "back": "Back",
           "submit": "Submit Application"
+        },
+        "submitting": "Submitting application…",
+        "success": {
+          "title": "Application Submitted",
+          "message": "Thank you for registering. Your bureau application is pending admin review. You will not appear in the public directory until approved.",
+          "backToBureau": "Back to Bureau Partners"
+        },
+        "errors": {
+          "submitFailed": "We could not submit your application. Please try again.",
+          "duplicateLicense": "This license number is already registered."
+        },
+        "status": {
+          "loading": "Checking your application status…",
+          "pendingTitle": "Application Under Review",
+          "pendingMessage": "Your bureau application for {name} is pending admin review. You will not appear in the public directory until approved.",
+          "paymentPendingTitle": "Payment Verification Pending",
+          "paymentPendingMessage": "Your application for {name} is awaiting payment verification by our team.",
+          "rejectedTitle": "Application Not Approved",
+          "rejectedMessage": "Your bureau application for {name} was not approved. Contact support@internationalrishta.com if you have questions.",
+          "approvedTitle": "Bureau Approved",
+          "approvedMessage": "Your bureau {name} is approved. Your referral code will be active for member signups.",
+          "submittedAt": "Submitted",
+          "backToBureau": "Back to Bureau Partners"
+        },
+        "afterSubmission": {
+          "title": "What happens after submission?",
+          "step1": "Our team verifies your payment proof (within 30 minutes)",
+          "step2": "Application reviewed within 14 days (includes background check)",
+          "step3": "If approved, you'll receive an invoice for PKR 200,000 registration fee",
+          "step4": "Upon payment, your license is activated and your referral code becomes active",
+          "step5": "Start earning commission on every referral you send to the platform"
         }
       },
       "landing": {
@@ -171,6 +202,28 @@
           "Kohat",
           "Muzaffargarh"
         ]
+      },
+      "referral": {
+        "invalidCode": "We could not match that referral code. You can still sign up without a bureau partner.",
+        "attributed": "You were referred by a partner bureau. Thank you for joining through them."
+      },
+      "directory": {
+        "title": "Find a Marriage Bureau",
+        "subtitle": "Browse verified partner bureaus across Pakistan",
+        "searchLabel": "Search bureaus",
+        "namePlaceholder": "Search by bureau name…",
+        "cityPlaceholder": "Filter by city or code (e.g. Lahore, LHE)…",
+        "emptyTitle": "No bureaus found",
+        "emptyDescription": "Try a different city or name. Only admin-approved bureaus appear here.",
+        "referralCode": "Referral code",
+        "copyCode": "Copy code",
+        "copied": "Copied!",
+        "call": "Call",
+        "email": "Email",
+        "referrals": "{count} referrals",
+        "rating": "Rating {rating}",
+        "loading": "Loading partner bureaus…",
+        "error": "We could not load bureaus. Please refresh the page."
       }
     },
     "footer": {
